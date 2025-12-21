@@ -1,0 +1,25 @@
+<UserControl
+  x:Class="avaloniaCrossPlat.Views.MainView"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:controls="using:avaloniaCrossPlat.Controls"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="using:avaloniaCrossPlat.ViewModels"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  x:DataType="vm:MainViewModel"
+  mc:Ignorable="d">
+  <Design.DataContext>
+    <!--
+      This only sets the DataContext for the previewer in an IDE,
+      to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs)
+    -->
+    <vm:MainViewModel />
+  </Design.DataContext>
+
+  <Grid ColumnDefinitions="*,*">
+    <controls:DataControl Grid.Column="0" ItemsSource="{CompiledBinding DataTemp}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+    <controls:DataControl Grid.Column="1" ItemsSource="{CompiledBinding DataPourcent}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+  </Grid>
+</UserControl>

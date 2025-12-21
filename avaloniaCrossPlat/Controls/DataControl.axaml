@@ -1,0 +1,60 @@
+<UserControl
+  x:Class="avaloniaCrossPlat.Controls.DataControl"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:control="using:avaloniaCrossPlat.Controls"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="using:avaloniaCrossPlat.ViewModels"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  x:DataType="control:DataControl"
+  mc:Ignorable="d"
+  x:Name="root">
+
+  <ScrollViewer VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+    <ItemsRepeater ItemsSource="{CompiledBinding ItemsSource, ElementName=root}">
+      <ItemsRepeater.ItemTemplate>
+        <DataTemplate x:DataType="vm:DataViewModel">
+          <Border IsVisible="{Binding Favorit}"
+            Width="200"
+            Background="#9F8DC5"
+            CornerRadius="10">
+            <Grid Width="200" RowDefinitions="Auto,*">
+              <Border
+                Grid.Row="0"
+                Padding="10,5,10,5"
+                Background="#5753A0"
+                CornerRadius="10, 0">
+                <TextBlock
+                  Foreground="White"
+                  Text="{Binding Name}"
+                  TextWrapping="Wrap" />
+              </Border>
+              <Grid Grid.Row="1" ColumnDefinitions="*,Auto">
+                <TextBlock
+                  Grid.Column="0"
+                  MinHeight="30"
+                  Padding="10,0,0,0"
+                  VerticalAlignment="Center"
+                  FontSize="24"
+                  Text="{Binding Value}" />
+                <TextBlock
+                  Grid.Column="1"
+                  MinHeight="30"
+                  Padding="10"
+                  VerticalAlignment="Center"
+                  FontSize="24"
+                  Text="{Binding Unit}" />
+              </Grid>
+            </Grid>
+          </Border>
+        </DataTemplate>
+      </ItemsRepeater.ItemTemplate>
+      <ItemsRepeater.Layout>
+        <StackLayout Orientation="Vertical" Spacing="5" />
+      </ItemsRepeater.Layout>
+    </ItemsRepeater>
+  </ScrollViewer>
+
+</UserControl>
