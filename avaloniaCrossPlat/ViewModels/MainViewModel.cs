@@ -17,6 +17,9 @@ public partial class MainViewModel : ViewModelBase
     private string? _endPoint = "";
 
     [ObservableProperty]
+    private string? _code = null;
+
+    [ObservableProperty]
     private ObservableCollection<DataViewModel> _data = new ObservableCollection<DataViewModel>();
     [ObservableProperty]
     private ObservableCollection<DataViewModel> _dataTemp = new ObservableCollection<DataViewModel>();
@@ -25,16 +28,24 @@ public partial class MainViewModel : ViewModelBase
 
 
     public MainViewModel()
-    {
+    {        
+        if (!String.IsNullOrEmpty(EndPoint))
+        {
+            LoadData();
+        }
     }
 
-    partial void OnEndPointChanged(string? oldValue, string? newValue)
+    partial void OnCodeChanged(string? value)
     {
+        if (!String.IsNullOrEmpty(value) && value.Length == 5)
+        {
+            Send();
+        }
     }
 
     public void Send()
     {
-        if (String.IsNullOrEmpty(EndPoint))
+        if (Code == null)
             IsDataValid = false;
         else
         {
@@ -45,12 +56,12 @@ public partial class MainViewModel : ViewModelBase
     {
         try
         {
-            if (String.IsNullOrEmpty(EndPoint))
+            if (Code == null)
                 return;
             var service = new HttpService();
 
             Console.WriteLine("1");
-            var json = await service.GetInfos(EndPoint);
+            var json = await service.GetInfos(Code);
             Console.WriteLine("2");
             using var doc = JsonDocument.Parse(json);
             Console.WriteLine("3");

@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
 using avaloniaCrossPlat.ViewModels;
-using CommunityToolkit.Mvvm.ComponentModel;
-
 
 namespace avaloniaCrossPlat.Controls;
 
