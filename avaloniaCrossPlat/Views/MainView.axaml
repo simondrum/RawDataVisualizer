@@ -17,9 +17,11 @@
     -->
     <vm:MainViewModel />
   </Design.DataContext>
-
-  <Grid ColumnDefinitions="*,*">
+  <Grid>
+    <TextBox VerticalAlignment="Center" Text="{CompiledBinding EndPoint}" HorizontalAlignment="Stretch" IsVisible="{CompiledBinding !IsDataValid}" /> 
+  <Grid ColumnDefinitions="*,*" IsVisible="{CompiledBinding IsDataValid}">
     <controls:DataControl Grid.Column="0" ItemsSource="{CompiledBinding DataTemp}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
     <controls:DataControl Grid.Column="1" ItemsSource="{CompiledBinding DataPourcent}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+  </Grid>
   </Grid>
 </UserControl>
