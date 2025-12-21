@@ -58,7 +58,7 @@ public partial class MainViewModel : ViewModelBase
             }
             Console.WriteLine($"{data.Name}");
         }
-        DataTemp = new ObservableCollection<DataViewModel>(Data.Where(x => x.Unit == " °C").OrderBy(x => x.Favorit, ));
+        DataTemp = new ObservableCollection<DataViewModel>(Data.Where(x => x.Unit == " °C").OrderBy(x => x.Favorit));
         DataPourcent = new ObservableCollection<DataViewModel>(Data.Where(x => x.Unit == " %").OrderBy(x => x.Favorit));
     }
 
