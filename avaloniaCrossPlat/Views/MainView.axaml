@@ -17,10 +17,32 @@
     -->
     <vm:MainViewModel />
   </Design.DataContext>
-  <Grid>
-    <controls:KeyPadView Code="{CompiledBinding Code, Mode=TwoWay}" IsVisible="{CompiledBinding !IsDataValid}" />
+  <Grid RowDefinitions="Auto,*">
+    <ProgressBar
+      Grid.Row="0"
+      Height="10"
+      Margin="0,8,0,0"
+      IsVisible="{CompiledBinding IsDataValid}"
+      Maximum="100"
+      Minimum="0"
+      Value="{CompiledBinding RefreshProgress}">
+
+      <ProgressBar.Transitions>
+        <Transitions>
+          <DoubleTransition
+            Easing="CubicEaseOut"
+            Property="Value"
+            Duration="0:0:0.2" />
+        </Transitions>
+      </ProgressBar.Transitions>
+    </ProgressBar>
+    <controls:KeyPadView
+      Grid.Row="1"
+      Code="{CompiledBinding Code,
+                             Mode=TwoWay}"
+      IsVisible="{CompiledBinding !IsDataValid}" />
     <Grid
-      Grid.RowSpan="2"
+      Grid.Row="1"
       HorizontalAlignment="Stretch"
       VerticalAlignment="Stretch"
       ColumnDefinitions="*,*"
