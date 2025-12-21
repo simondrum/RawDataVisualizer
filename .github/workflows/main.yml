@@ -24,6 +24,9 @@ jobs:
       - name: Publish WASM
         run: dotnet publish avaloniaCrossPlat.Browser/avaloniaCrossPlat.Browser.csproj -c Release -o publish
 
+      - name: List publish directory (debug)
+        run: ls -R publish/wwwroot
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
