@@ -4,6 +4,12 @@
 <head>
     <title>avaloniaCrossPlat.Browser</title>
     <meta charset="UTF-8">
+    <script>
+        const repo = "RawDataVisualizer";
+        const isGithubPages = location.hostname.endsWith("github.io");
+        const base = isGithubPages ? `/${repo}/` : "/";
+        document.write(`<base href="${base}">`);
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./app.css" />
 </head>
