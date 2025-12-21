@@ -30,44 +30,66 @@ public partial class MainViewModel : ViewModelBase
 
     partial void OnEndPointChanged(string? oldValue, string? newValue)
     {
-        if (String.IsNullOrEmpty(newValue))
+    }
+
+    public void Send()
+    {
+        if (String.IsNullOrEmpty(EndPoint))
             IsDataValid = false;
         else
         {
             LoadData();
         }
     }
-
     private async void LoadData()
     {
         try
         {
-
+            if (String.IsNullOrEmpty(EndPoint))
+                return;
             var service = new HttpService();
 
+            Console.WriteLine("1");
             var json = await service.GetInfos(EndPoint);
-            var jsonArray = JsonSerializer.Deserialize<JsonArray>(json);
-            if (jsonArray is null)
-                return;
-            foreach (var element in jsonArray)
-            {
-                if (element is not JsonObject obj)
-                    continue;
+            Console.WriteLine("2");
+            using var doc = JsonDocument.Parse(json);
+            Console.WriteLine("3");
 
-                Data.Add(new DataViewModel
+            var root = doc.RootElement;
+            Console.WriteLine("4");
+            var array = root.EnumerateArray();
+            Console.WriteLine("5");
+
+            foreach (var element in array)
+            {
+                try
                 {
-                    Id = obj["id"]?.GetValue<string>(),
-                    Name = obj["name"]?.GetValue<string>(),
-                    Value = obj["value"]?.GetValue<string>(),
-                    Unit = obj["unit"]?.GetValue<string>(),
-                    Favorit = IsFavorite(obj["name"]?.GetValue<string>())
-                });
+                    
+                var data = new DataViewModel
+                {
+                    Id = element.GetProperty("id").GetString(),
+                    Name = element.GetProperty("name").GetString(),
+                    Value = element.GetProperty("value").GetString(),
+                    Unit = element.GetProperty("unit").GetString()
+                };
+                if (data != null)
+                {
+
+                    if (!String.IsNullOrEmpty(data.Name))
+                        data.Favorit = IsFavorite(data.Name);
+                    Data.Add(data);
+                }
+                }catch(Exception)
+                {
+                    
+                }
 
             }
+            Console.WriteLine("3");
             string tempUnit = "";
             foreach (var data in Data.OrderBy(x => x.Unit))
             {
-                if (tempUnit != data.Unit)
+                if (tempUnit != data.Unit && data.Unit != null)
 
                 {
                     tempUnit = data.Unit;
@@ -76,16 +98,20 @@ public partial class MainViewModel : ViewModelBase
                 }
                 Console.WriteLine($"{data.Name}");
             }
+            Console.WriteLine("6");
             DataTemp = new ObservableCollection<DataViewModel>(Data.Where(x => x.Unit == " °C").OrderBy(x => x.Favorit));
             DataPourcent = new ObservableCollection<DataViewModel>(Data.Where(x => x.Unit == " %").OrderBy(x => x.Favorit));
+            Console.WriteLine("7");
             if (Data != null && Data.Count > 0)
             {
-                Dispatcher.UIThread.Invoke(() => { IsDataValid = true; });
+                IsDataValid = true;
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            Dispatcher.UIThread.Invoke(() => { IsDataValid = false; });
+            Console.WriteLine($"Exception : {ex}");
+
+            IsDataValid = false;
         }
     }
 

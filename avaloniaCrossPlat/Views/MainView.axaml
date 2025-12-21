@@ -17,11 +17,37 @@
     -->
     <vm:MainViewModel />
   </Design.DataContext>
-  <Grid>
-    <TextBox VerticalAlignment="Center" Text="{CompiledBinding EndPoint}" HorizontalAlignment="Stretch" IsVisible="{CompiledBinding !IsDataValid}" /> 
-  <Grid ColumnDefinitions="*,*" IsVisible="{CompiledBinding IsDataValid}">
-    <controls:DataControl Grid.Column="0" ItemsSource="{CompiledBinding DataTemp}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
-    <controls:DataControl Grid.Column="1" ItemsSource="{CompiledBinding DataPourcent}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
-  </Grid>
+  <Grid RowDefinitions="*,*">
+    <TextBox
+      Grid.Row="0"
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Center"
+      IsVisible="{CompiledBinding !IsDataValid}"
+      Text="{CompiledBinding EndPoint}" />
+    <Button
+      Grid.Row="1"
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Center"
+      Command="{CompiledBinding Send}"
+      IsVisible="{CompiledBinding !IsDataValid}">
+      Send
+    </Button>
+    <Grid
+      Grid.RowSpan="2"
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Stretch"
+      ColumnDefinitions="*,*"
+      IsVisible="{CompiledBinding IsDataValid}">
+      <controls:DataControl
+        Grid.Column="0"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        ItemsSource="{CompiledBinding DataTemp}" />
+      <controls:DataControl
+        Grid.Column="1"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        ItemsSource="{CompiledBinding DataPourcent}" />
+    </Grid>
   </Grid>
 </UserControl>
