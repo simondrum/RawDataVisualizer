@@ -6,6 +6,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <WasmBasePath>/RawDataVisualizer/</WasmBasePath>
+  </PropertyGroup>
+
+
   <ItemGroup>
     <PackageReference Include="Avalonia.Browser" />
   </ItemGroup>
