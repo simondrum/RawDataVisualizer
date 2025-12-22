@@ -16,6 +16,9 @@ public partial class MainViewModel : ViewModelBase
     private bool? _isDataValid = false;
 
     [ObservableProperty]
+    private bool? _error = false;
+
+    [ObservableProperty]
     private string? _endPoint = "";
 
     [ObservableProperty]
@@ -47,6 +50,21 @@ public partial class MainViewModel : ViewModelBase
         if (!String.IsNullOrEmpty(value) && value.Length == 5)
         {
             Send();
+            if (IsDataValid == null || !(bool)IsDataValid)
+            {
+                Code = "";
+                Error = true;
+                var timer = new DispatcherTimer()
+                {
+                    Interval = TimeSpan.FromSeconds(5)
+                };
+                timer.Tick += async (_, __) =>
+                {
+                    Error = false;
+                    timer.Stop();
+                };
+                timer.Start();
+            }
         }
     }
 
@@ -67,7 +85,7 @@ public partial class MainViewModel : ViewModelBase
                 return;
             var service = new HttpService();
 
-            Console.WriteLine("1");
+            Console.WriteLine($"Code => {Code}");
             var json = await service.GetInfos(Code);
             Console.WriteLine("2");
             using var doc = JsonDocument.Parse(json);
@@ -198,20 +216,4 @@ public partial class MainViewModel : ViewModelBase
 
     }
 }
-public partial class DataViewModel : ViewModelBase
-{
-    [ObservableProperty]
-    private string? _id;
 
-    [ObservableProperty]
-    private string? _name;
-
-    [ObservableProperty]
-    private string? _value;
-
-    [ObservableProperty]
-    private string? _unit;
-
-    [ObservableProperty]
-    private bool? _favorit;
-}

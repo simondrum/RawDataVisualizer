@@ -9,6 +9,7 @@
   d:DesignHeight="450"
   d:DesignWidth="800"
   x:DataType="vm:MainViewModel"
+  Background="#001219"
   mc:Ignorable="d">
   <Design.DataContext>
     <!--
@@ -18,6 +19,15 @@
     <vm:MainViewModel />
   </Design.DataContext>
   <Grid RowDefinitions="Auto,*">
+    <Border
+      Grid.RowSpan="2"
+      Background="#ae2012"
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Stretch"
+      Effect="blur(10)"
+      IsHitTestVisible="False"
+      IsVisible="{CompiledBinding Error}"
+      ZIndex="100" />
     <ProgressBar
       Grid.Row="0"
       Height="10"
@@ -36,11 +46,15 @@
         </Transitions>
       </ProgressBar.Transitions>
     </ProgressBar>
-    <controls:KeyPadView
-      Grid.Row="1"
-      Code="{CompiledBinding Code,
-                             Mode=TwoWay}"
-      IsVisible="{CompiledBinding !IsDataValid}" />
+    <controls:KeyPadView Grid.Row="1" Code="{CompiledBinding Code, Mode=TwoWay}">
+      <!--  IsVisible="{CompiledBinding !IsDataValid and !Error}">  -->
+      <controls:KeyPadView.IsVisible>
+      <MultiBinding Converter="{x:Static BoolConverters.And}">
+        <Binding Path="!Error" />
+        <Binding Path="!IsDataValid" />
+      </MultiBinding>
+      </controls:KeyPadView.IsVisible>
+    </controls:KeyPadView>
     <Grid
       Grid.Row="1"
       HorizontalAlignment="Stretch"
