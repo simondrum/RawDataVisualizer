@@ -10,11 +10,11 @@ public class StringToBrushConverter : IValueConverter
     public static readonly StringToBrushConverter Instance = new();
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is string s && !string.IsNullOrWhiteSpace(s))
+        try
         {
-            try
-            {
-                string[] array = {
+            if (value is null)
+                return null;
+            string[] array = {
                 "#0a9396",
                 "#94d2bd",
                 "#e9d8a6",
@@ -24,30 +24,30 @@ public class StringToBrushConverter : IValueConverter
                 "#ae2012",
                 "#9b2226"
                 };
-                if (Decimal.TryParse(s, out var decValue))
-                {
-                    if (decValue < 0)
-                        return new SolidColorBrush(Color.Parse(array[1]));
-                    if (decValue < 10)
-                        return new SolidColorBrush(Color.Parse(array[2]));
-                    if (decValue < 30)
-                        return new SolidColorBrush(Color.Parse(array[3]));
-                    if (decValue < 45)
-                        return new SolidColorBrush(Color.Parse(array[4]));
-                    if (decValue < 54)
-                        return new SolidColorBrush(Color.Parse(array[5]));
-                    else
-                        return new SolidColorBrush(Color.Parse(array[6]));
-                }
-                return new SolidColorBrush(Color.Parse(s));
-            }
-            catch
+                
+            if (Decimal.TryParse(value.ToString().Replace('.',','), out var decValue))
             {
-                // couleur invalide
+                if (decValue < 0)
+                    return new SolidColorBrush(Color.Parse(array[1]));
+                if (decValue < 10)
+                    return new SolidColorBrush(Color.Parse(array[2]));
+                if (decValue < 30)
+                    return new SolidColorBrush(Color.Parse(array[3]));
+                if (decValue < 45)
+                    return new SolidColorBrush(Color.Parse(array[4]));
+                if (decValue < 54)
+                    return new SolidColorBrush(Color.Parse(array[5]));
+                if (decValue < 60)
+                    return new SolidColorBrush(Color.Parse(array[6]));
+                else
+                    return new SolidColorBrush(Color.Parse(array[7]));
             }
         }
-
-        return Brushes.Transparent; // fallback
+        catch
+        {
+            return null;
+        }
+        return null;
     }
 
 

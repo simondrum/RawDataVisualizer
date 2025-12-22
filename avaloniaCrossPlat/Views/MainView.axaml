@@ -19,15 +19,6 @@
     <vm:MainViewModel />
   </Design.DataContext>
   <Grid RowDefinitions="Auto,*">
-    <Border
-      Grid.RowSpan="2"
-      Background="#ae2012"
-      HorizontalAlignment="Stretch"
-      VerticalAlignment="Stretch"
-      Effect="blur(10)"
-      IsHitTestVisible="False"
-      IsVisible="{CompiledBinding Error}"
-      ZIndex="100" />
     <ProgressBar
       Grid.Row="0"
       Height="10"
@@ -47,12 +38,11 @@
       </ProgressBar.Transitions>
     </ProgressBar>
     <controls:KeyPadView Grid.Row="1" Code="{CompiledBinding Code, Mode=TwoWay}">
-      <!--  IsVisible="{CompiledBinding !IsDataValid and !Error}">  -->
       <controls:KeyPadView.IsVisible>
-      <MultiBinding Converter="{x:Static BoolConverters.And}">
-        <Binding Path="!Error" />
-        <Binding Path="!IsDataValid" />
-      </MultiBinding>
+        <MultiBinding Converter="{x:Static BoolConverters.And}">
+          <Binding Path="!Error" />
+          <Binding Path="!IsDataValid" />
+        </MultiBinding>
       </controls:KeyPadView.IsVisible>
     </controls:KeyPadView>
     <Grid
@@ -63,14 +53,15 @@
       IsVisible="{CompiledBinding IsDataValid}">
       <controls:DataControl
         Grid.Column="0"
+        Grid.ColumnSpan="2"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch"
-        ItemsSource="{CompiledBinding DataTemp}" />
-      <controls:DataControl
+        ItemsSource="{CompiledBinding Data}" />
+      <!-- <controls:DataControl
         Grid.Column="1"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch"
-        ItemsSource="{CompiledBinding DataPourcent}" />
+        ItemsSource="{CompiledBinding DataPourcent}" />-->
     </Grid>
   </Grid>
 </UserControl>

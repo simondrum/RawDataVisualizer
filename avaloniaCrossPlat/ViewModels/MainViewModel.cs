@@ -50,27 +50,32 @@ public partial class MainViewModel : ViewModelBase
         if (!String.IsNullOrEmpty(value) && value.Length == 5)
         {
             Send();
-            if (IsDataValid == null || !(bool)IsDataValid)
+        }
+    }
+
+    partial void OnErrorChanged(bool? value)
+    {
+        if (value != null && (bool)value)
+        {
+            var timer = new DispatcherTimer()
             {
-                Code = "";
-                Error = true;
-                var timer = new DispatcherTimer()
-                {
-                    Interval = TimeSpan.FromSeconds(5)
-                };
-                timer.Tick += async (_, __) =>
+                Interval = TimeSpan.FromSeconds(5)
+            };
+            timer.Tick += async (_, __) =>
+            {
+                timer.Stop();
+                Dispatcher.UIThread.Invoke(() =>
                 {
                     Error = false;
-                    timer.Stop();
-                };
-                timer.Start();
-            }
+                });
+            };
+            timer.Start();
         }
     }
 
     public void Send()
     {
-        if (Code == null)
+        if (String.IsNullOrEmpty(Code))
             IsDataValid = false;
         else
         {
@@ -96,6 +101,9 @@ public partial class MainViewModel : ViewModelBase
             var array = root.EnumerateArray();
             Console.WriteLine("5");
 
+            if (array.Count() == 0)
+                throw new ArgumentNullException();
+
             List<DataViewModel> tempData = new List<DataViewModel>(); ;
             foreach (var element in array)
             {
@@ -119,7 +127,6 @@ public partial class MainViewModel : ViewModelBase
                 }
                 catch (Exception)
                 {
-
                 }
 
             }
@@ -146,6 +153,7 @@ public partial class MainViewModel : ViewModelBase
                 if (IsDataValid == null || !(bool)IsDataValid)
                 {
                     IsDataValid = true;
+                    Error = false;
                     StartGlobalTimer();
                     StartAnimationTimer();
                 }
@@ -154,7 +162,8 @@ public partial class MainViewModel : ViewModelBase
         catch (Exception ex)
         {
             Console.WriteLine($"Exception : {ex}");
-
+            Code = "";
+            Error = true;
             IsDataValid = false;
         }
     }

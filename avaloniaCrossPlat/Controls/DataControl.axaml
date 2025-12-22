@@ -25,7 +25,7 @@
             MinWidth="100"
             MaxWidth="200"
             Margin="5"
-            Background="{Binding Value, Converter={StaticResource StringToBrushConverter}}}"
+            Background="{Binding Value, Converter={StaticResource StringToBrushConverter}}"
             CornerRadius="10"
             IsVisible="{Binding Favorit}">
             <Grid
@@ -35,7 +35,7 @@
               <Border
                 Grid.Row="0"
                 Padding="10,5,10,5"
-                Background="#005f73"
+                Background="#0a9396"
                 CornerRadius="10, 0">
                 <TextBlock
                   Foreground="White"
