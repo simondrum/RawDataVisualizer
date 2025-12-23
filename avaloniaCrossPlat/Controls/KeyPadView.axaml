@@ -15,9 +15,10 @@
     <UserControl.Styles>
         <Style Selector="Button.KeyPad">
             <Setter Property="Background" Value="#0a9396" />
+            <Setter Property="RenderTransform" Value="scale(1)" />
         </Style>
-        <Style Selector="Button.KeyPad:KeyPressed">
-            <Setter Property="RenderTransform" Value="scale(2)" />
+        <Style Selector="Button.KeyPad:pressed">
+            <Setter Property="RenderTransform" Value="scale(1.2)" />
         </Style>
     </UserControl.Styles>
     <UserControl.Transitions>
@@ -55,6 +56,7 @@
             Classes="KeyPad"
             Click="Button_Click"
             Content="1"
+            HotKey="NumPad1"
             CornerRadius="50"
             FontSize="30" />
         <Button
@@ -67,6 +69,7 @@
             VerticalContentAlignment="Center"
             Background="#0a9396"
             Click="Button_Click"
+            HotKey="NumPad2"
             Content="2"
             CornerRadius="50"
             FontSize="30" />

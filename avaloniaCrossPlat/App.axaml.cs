@@ -6,11 +6,15 @@ using System.Linq;
 using Avalonia.Markup.Xaml;
 using avaloniaCrossPlat.ViewModels;
 using avaloniaCrossPlat.Views;
+using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace avaloniaCrossPlat;
 
 public partial class App : Application
 {
+     public IServiceProvider Services { get; set; } = null!;
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -30,9 +34,10 @@ public partial class App : Application
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
+            var vm = Services.GetRequiredService<MainViewModel>();
             singleViewPlatform.MainView = new MainView
             {
-                DataContext = new MainViewModel()
+                DataContext = vm
             };
         }
 

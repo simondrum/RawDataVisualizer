@@ -5,8 +5,11 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Threading;
+using avaloniaCrossPlat.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace avaloniaCrossPlat.ViewModels;
 
@@ -36,12 +39,37 @@ public partial class MainViewModel : ViewModelBase
     private readonly TimeSpan _refreshInterval = TimeSpan.FromSeconds(30);
     private readonly TimeSpan _uiTick = TimeSpan.FromMilliseconds(100);
     private DateTime _lastRefresh;
+    private IServiceProvider Services;
 
     public MainViewModel()
     {
-        if (!String.IsNullOrEmpty(EndPoint))
+        if (Application.Current is App app)
         {
-            LoadData();
+            Services = app.Services;
+            if (Services != null)
+            {
+                Console.WriteLine("Services is not null");
+                try
+                {
+                    var serviceStorage = Services.GetRequiredService<IClientContextStorage>();
+                    if (serviceStorage != null)
+                    {
+                        Console.WriteLine("serviceStorage is not null");
+                        var clientId = serviceStorage.GetClientId();
+                        clientId.ini
+                        if (!String.IsNullOrEmpty(clientId))
+                        {
+                            Code = clientId;
+                        }
+                        Console.WriteLine($"clientId => {clientId}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+            }
+            //     Console.WriteLine($"ClientId => {Services.GetRequiredService<IClientContextStorage>()?.GetClientId()}");
         }
     }
 
@@ -154,6 +182,7 @@ public partial class MainViewModel : ViewModelBase
                 {
                     IsDataValid = true;
                     Error = false;
+                    Services.GetRequiredService<IClientContextStorage>()?.SetClientId(Code);
                     StartGlobalTimer();
                     StartAnimationTimer();
                 }
