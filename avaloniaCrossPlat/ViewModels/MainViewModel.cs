@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Threading;
 using avaloniaCrossPlat.Services;
+using avaloniaCrossPlat.ViewModels.HeatIndicators;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -56,7 +57,7 @@ public partial class MainViewModel : ViewModelBase
                     {
                         Console.WriteLine("serviceStorage is not null");
                         var clientId = serviceStorage.GetClientId();
-                        
+
                         if (!String.IsNullOrEmpty(clientId))
                         {
                             Code = clientId;
@@ -110,6 +111,22 @@ public partial class MainViewModel : ViewModelBase
             LoadData();
         }
     }
+
+    #region data indicators
+    [ObservableProperty]
+    private InOutViewModel? _inOutViewModel;
+    [ObservableProperty]
+    private LowHotWaterViewModel? _lowHotWaterViewModel;
+    [ObservableProperty]
+    private MidHotWaterViewModel? _midHotWaterViewModel;
+    [ObservableProperty]
+    private SolarPanelViewModel? _solarPanelViewModel;
+    [ObservableProperty]
+    private StoveViewModel? _stoveViewModel;
+    [ObservableProperty]
+    private UpperHotWaterViewModel? _upperHotWaterViewModel;
+    #endregion
+
     private async void LoadData()
     {
         try
@@ -118,39 +135,62 @@ public partial class MainViewModel : ViewModelBase
                 return;
             var service = new HttpService();
 
-            Console.WriteLine($"Code => {Code}");
             var json = await service.GetInfos(Code);
-            Console.WriteLine("2");
             using var doc = JsonDocument.Parse(json);
-            Console.WriteLine("3");
-
             var root = doc.RootElement;
-            Console.WriteLine("4");
             var array = root.EnumerateArray();
-            Console.WriteLine("5");
 
             if (array.Count() == 0)
                 throw new ArgumentNullException();
 
             List<DataViewModel> tempData = new List<DataViewModel>(); ;
+
+            InOutViewModel = new InOutViewModel();
+
             foreach (var element in array)
             {
                 try
                 {
+                    dsmlfsdkfmlkfmdlskdfm
+                    string? name = element.GetProperty("name").GetString() ?? "";
+                    if (name is null)
+                        continue;
+                    ViewModelBase data = GetViewModel(name);
+                    if (data is null)
+                        continue;
 
-                    var data = new DataViewModel
+                    if (data is InOutViewModel)
                     {
-                        Id = element.GetProperty("id").GetString(),
-                        Name = element.GetProperty("name").GetString(),
-                        Value = element.GetProperty("value").GetString(),
-                        Unit = element.GetProperty("unit").GetString()
-                    };
-                    if (data != null)
+                        switch (name)
+                        {
+                            case "12 SONDE EXTERIEUR":
+                                InOutViewModel.OutTemperature = Convert.ToDecimal(element.GetProperty("value").GetString());
+                                break;
+                            case "M1 S2 SONDE AMBIANCE MUR CHAUFFANT ":
+                                InOutViewModel.InTemperature = Convert.ToDecimal(element.GetProperty("value").GetString());
+                                break;
+                            case "M1 S3 SONDE DE COMPENSATION INTERRUPTEUR CHAUFFAGE":
+                                InOutViewModel.InstructionTemperature = Convert.ToDecimal(element.GetProperty("value").GetString());
+                                break;
+                        }
+                        continue;
+                    }
+                    if (data is DataViewModel dataViewModel)
                     {
+                        dataViewModel.Id = element.GetProperty("id").GetString();
+                        dataViewModel.Name = element.GetProperty("name").GetString();
+                        dataViewModel.Value = element.GetProperty("value").GetString();
+                        dataViewModel.Unit = element.GetProperty("unit").GetString();
+                        if (data != null)
+                        {
 
-                        if (!String.IsNullOrEmpty(data.Name))
-                            data.Favorit = IsFavorite(data.Name);
-                        tempData.Add(data);
+                            if (!String.IsNullOrEmpty(dataViewModel.Name))
+                            {
+                                dataViewModel.Favorit = IsFavorite(dataViewModel.Name);
+                                dataViewModel.Title = GetLibelle(dataViewModel.Name);
+                            }
+                            tempData.Add(dataViewModel);
+                        }
                     }
                 }
                 catch (Exception)
@@ -182,7 +222,14 @@ public partial class MainViewModel : ViewModelBase
                 {
                     IsDataValid = true;
                     Error = false;
-                    Services.GetRequiredService<IClientContextStorage>()?.SetClientId(Code);
+                    try
+                    {
+                        Services.GetRequiredService<IClientContextStorage>()?.SetClientId(Code);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                    }
                     StartGlobalTimer();
                     StartAnimationTimer();
                 }
@@ -240,16 +287,104 @@ public partial class MainViewModel : ViewModelBase
     {
         switch (name)
         {
-            case "M1 R1 POMPE CHAUFFAGE MUR CHAUFFANT ":
-            case "1 SONDE CAPTEUR":
-            case "5 SONDE HAUT BALLON ECS":
-            case "8 SONDE POELE":
-            case "12 SONDE EXTERIEUR":
-            case "M1 S2 SONDE AMBIANCE MUR CHAUFFANT ":
+            case "M1 R1 POMPE CHAUFFAGE MUR CHAUFFANT ": //La maison chauffe
+            case "1 SONDE CAPTEUR": //capteur solaire
+            case "5 SONDE HAUT BALLON ECS": //Eau chaude chauffage
+            case "8 SONDE POELE": //température poele
+            case "R9 POMPE BOUILLEUR": //Poele chauffe eau
+            case "12 SONDE EXTERIEUR": //température extérieure 
+            case "M1 S2 SONDE AMBIANCE MUR CHAUFFANT ": //température intérieure
+            case "M1 S3 SONDE DE COMPENSATION INTERRUPTEUR CHAUFFAGE": //consigne            
+            case "3 SONDE ENTREE CHAUDE ECHANGEUR SOLAIRE ": //température solaire vers maison
+            case "Sortie B PWM SECONDAIRE": //Pourcentage solaire vers eau chaude
+            case "7 SONDE BALLON DEPART ": // réserve chauffage
             case "2 SONDE BAS BALLON ":
                 return true;
             default:
                 return false;
+        }
+
+    }
+
+    private string? GetLibelle(string name)
+    {
+        switch (name)
+        {
+            case "M1 R1 POMPE CHAUFFAGE MUR CHAUFFANT ":
+                return "Chauffage allumé";
+            case "1 SONDE CAPTEUR":
+                return "capteur solaire";
+            case "5 SONDE HAUT BALLON ECS":
+                return "Eau chaude chauffage";
+            case "8 SONDE POELE":
+                return "température poele";
+            case "R9 POMPE BOUILLEUR":
+                return "Poele chauffe eau";
+            case "12 SONDE EXTERIEUR":
+                return "température extérieure";
+            case "M1 S2 SONDE AMBIANCE MUR CHAUFFANT ":
+                return "température intérieure";
+            case "M1 S3 SONDE DE COMPENSATION INTERRUPTEUR CHAUFFAGE":
+                return "consigne";
+            case "3 SONDE ENTREE CHAUDE ECHANGEUR SOLAIRE ":
+                return "température solaire vers maison";
+            case "Sortie B PWM SECONDAIRE":
+                return "Pourcentage solaire vers eau chaude";
+            case "7 SONDE BALLON DEPART ":
+                return "réserve chauffage";
+            case "2 SONDE BAS BALLON ":
+                return "Bas du ballon";
+            default:
+                return name;
+        }
+
+    }
+
+    private ViewModelBase? GetViewModel(string? name)
+    {
+        switch (name)
+        {
+            // case "M1 R1 POMPE CHAUFFAGE MUR CHAUFFANT ":
+            //     return "Chauffage allumé";
+            case "1 SONDE CAPTEUR":
+                {
+                    SolarPanelViewModel = new SolarPanelViewModel();
+                    return SolarPanelViewModel;
+                }
+            case "5 SONDE HAUT BALLON ECS":
+                {
+                    UpperHotWaterViewModel = new UpperHotWaterViewModel();
+                    return UpperHotWaterViewModel;
+                }
+            case "8 SONDE POELE":
+                {
+                    StoveViewModel = new StoveViewModel();
+                    return StoveViewModel;
+                }
+            // case "R9 POMPE BOUILLEUR":
+            //     return "Poele chauffe eau";
+            case "12 SONDE EXTERIEUR":
+                return InOutViewModel;
+            case "M1 S2 SONDE AMBIANCE MUR CHAUFFANT ":
+                return InOutViewModel;
+            case "M1 S3 SONDE DE COMPENSATION INTERRUPTEUR CHAUFFAGE":
+                return InOutViewModel;
+            // case "3 SONDE ENTREE CHAUDE ECHANGEUR SOLAIRE ":
+            //     return new DataViewModel();
+            // case "Sortie B PWM SECONDAIRE":
+            //     return new DataViewModel();
+            case "7 SONDE BALLON DEPART ":
+                {
+                    MidHotWaterViewModel = new MidHotWaterViewModel();
+                    return MidHotWaterViewModel;
+                }
+            case "2 SONDE BAS BALLON ":
+                {
+                    LowHotWaterViewModel = new LowHotWaterViewModel();
+                    return LowHotWaterViewModel;
+                }
+            default:
+                return new DataViewModel(); ;
         }
 
     }

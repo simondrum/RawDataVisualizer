@@ -26,4 +26,7 @@ public partial class DataViewModel : ViewModelBase
 
     [ObservableProperty]
     private bool? _favorit;
+
+    [ObservableProperty]
+    private string? _title;
 }

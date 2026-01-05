@@ -35,11 +35,11 @@
               <Border
                 Grid.Row="0"
                 Padding="10,5,10,5"
-                Background="#0a9396"
+                Background="Black"
                 CornerRadius="10, 0">
                 <TextBlock
                   Foreground="White"
-                  Text="{Binding Name}"
+                  Text="{Binding Title}"
                   TextWrapping="Wrap" />
               </Border>
               <Grid Grid.Row="1" ColumnDefinitions="*,Auto">

@@ -18,7 +18,7 @@
     -->
     <vm:MainViewModel />
   </Design.DataContext>
-  <Grid RowDefinitions="Auto,*">
+  <Grid RowDefinitions="Auto,Auto,*">
     <ProgressBar
       Grid.Row="0"
       Height="10"
@@ -37,7 +37,7 @@
         </Transitions>
       </ProgressBar.Transitions>
     </ProgressBar>
-    <controls:KeyPadView Grid.Row="1" Code="{CompiledBinding Code, Mode=TwoWay}">
+    <controls:KeyPadView Grid.Row="2" Code="{CompiledBinding Code, Mode=TwoWay}">
       <controls:KeyPadView.IsVisible>
         <MultiBinding Converter="{x:Static BoolConverters.And}">
           <Binding Path="!Error" />
@@ -47,11 +47,62 @@
     </controls:KeyPadView>
     <Grid
       Grid.Row="1"
+      Grid.Column="0"
+      Grid.ColumnSpan="2"
       HorizontalAlignment="Stretch"
       VerticalAlignment="Stretch"
       ColumnDefinitions="*,*"
-      IsVisible="{CompiledBinding IsDataValid}">
+      IsVisible="{CompiledBinding IsDataValid}"
+      RowDefinitions="Auto,*">
+      <Border
+        Grid.Row="0"
+        MinWidth="100"
+        Margin="5"
+        CornerRadius="10">
+        <Grid
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          RowDefinitions="Auto,*">
+          <Border
+            Grid.Row="0"
+            Padding="10,5,10,5"
+            Background="Black"
+            CornerRadius="10, 0">
+            <TextBlock
+              Foreground="White"
+              Text="{Binding InOutViewModel.Title}"
+              TextWrapping="Wrap" />
+          </Border>
+          <Grid Grid.Row="1" ColumnDefinitions="*,*,*">
+            <TextBlock
+              Grid.Column="0"
+              MinHeight="30"
+              Padding="10,0,0,0"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Center"
+              FontSize="24"
+              Text="{Binding InOutViewModel.InTemperature}" />
+            <TextBlock
+              Grid.Column="1"
+              MinHeight="30"
+              Padding="10,0,0,0"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Center"
+              FontSize="24"
+              Text="{Binding InOutViewModel.OutTemperature}" />
+            <TextBlock
+              Grid.Column="2"
+              MinHeight="30"
+              Padding="10,0,0,0"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Center"
+              FontSize="24"
+              Text="{Binding InOutViewModel.InstructionTemperature}" />
+          </Grid>
+        </Grid>
+      </Border>
       <controls:DataControl
+        Grid.Row="2"
         Grid.Column="0"
         Grid.ColumnSpan="2"
         HorizontalAlignment="Stretch"
