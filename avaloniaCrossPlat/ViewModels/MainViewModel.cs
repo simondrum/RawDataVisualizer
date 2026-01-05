@@ -56,7 +56,7 @@ public partial class MainViewModel : ViewModelBase
                     {
                         Console.WriteLine("serviceStorage is not null");
                         var clientId = serviceStorage.GetClientId();
-                        clientId.ini
+                        
                         if (!String.IsNullOrEmpty(clientId))
                         {
                             Code = clientId;
