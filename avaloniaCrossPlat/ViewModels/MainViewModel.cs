@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -17,7 +18,7 @@ namespace avaloniaCrossPlat.ViewModels;
 public partial class MainViewModel : ViewModelBase
 {
     [ObservableProperty]
-    private bool? _isDataValid = false;
+    private bool? _isDataValid = null;
 
     [ObservableProperty]
     private bool? _error = false;
@@ -150,8 +151,7 @@ public partial class MainViewModel : ViewModelBase
             foreach (var element in array)
             {
                 try
-                {
-                    dsmlfsdkfmlkfmdlskdfm
+                {                    
                     string? name = element.GetProperty("name").GetString() ?? "";
                     if (name is null)
                         continue;
@@ -159,18 +159,24 @@ public partial class MainViewModel : ViewModelBase
                     if (data is null)
                         continue;
 
+                    string? nullValue = element.GetProperty("value").GetString();
+                    if (nullValue is null)
+                        continue;
+
+                    string value = (string)nullValue;
+
                     if (data is InOutViewModel)
                     {
                         switch (name)
                         {
                             case "12 SONDE EXTERIEUR":
-                                InOutViewModel.OutTemperature = Convert.ToDecimal(element.GetProperty("value").GetString());
+                                InOutViewModel.OutTemperature = Decimal.Parse(value, CultureInfo.InvariantCulture );
                                 break;
                             case "M1 S2 SONDE AMBIANCE MUR CHAUFFANT ":
-                                InOutViewModel.InTemperature = Convert.ToDecimal(element.GetProperty("value").GetString());
+                                InOutViewModel.InTemperature = Decimal.Parse(value, CultureInfo.InvariantCulture );
                                 break;
                             case "M1 S3 SONDE DE COMPENSATION INTERRUPTEUR CHAUFFAGE":
-                                InOutViewModel.InstructionTemperature = Convert.ToDecimal(element.GetProperty("value").GetString());
+                                InOutViewModel.InstructionTemperature = Decimal.Parse(value, CultureInfo.InvariantCulture );
                                 break;
                         }
                         continue;
@@ -282,6 +288,7 @@ public partial class MainViewModel : ViewModelBase
     {
         LoadData();
     }
+
 
     private bool? IsFavorite(string name)
     {
