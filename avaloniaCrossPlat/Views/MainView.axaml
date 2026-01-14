@@ -297,11 +297,13 @@
             Grid.Row="0"
             Margin="10"
             FontSize="18"
+            Foreground="#1f1f1f"
             Text="Solaire" />
           <TextBlock
             Grid.Row="1"
             Margin="10"
             FontSize="30"
+            Foreground="#1f1f1f"
             FontWeight="Bold"
             Text="{CompiledBinding SolarPanelViewModel.Value}" />
         </Grid>
