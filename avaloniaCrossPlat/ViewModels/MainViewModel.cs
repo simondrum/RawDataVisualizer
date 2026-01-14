@@ -30,6 +30,15 @@ public partial class MainViewModel : ViewModelBase
     private string? _code = null;
 
     [ObservableProperty]
+    private string? _pompeSolaire = null;
+
+[ObservableProperty]
+    private string? _pompePoele = null;
+
+    [ObservableProperty]
+    private string? _pompeMur = null;
+
+    [ObservableProperty]
     private ObservableCollection<DataViewModel> _data = new ObservableCollection<DataViewModel>();
     [ObservableProperty]
     private ObservableCollection<DataViewModel> _dataTemp = new ObservableCollection<DataViewModel>();
@@ -45,6 +54,8 @@ public partial class MainViewModel : ViewModelBase
 
     public MainViewModel()
     {
+        Code = "28559";
+        return;
         if (Application.Current is App app)
         {
             Services = app.Services;
@@ -136,7 +147,7 @@ public partial class MainViewModel : ViewModelBase
                 return;
             var service = new HttpService();
 
-            var json = await service.GetInfos(Code);
+            var json = await service.GetInfos("28559");
             using var doc = JsonDocument.Parse(json);
             var root = doc.RootElement;
             var array = root.EnumerateArray();
@@ -151,7 +162,7 @@ public partial class MainViewModel : ViewModelBase
             foreach (var element in array)
             {
                 try
-                {                    
+                {
                     string? name = element.GetProperty("name").GetString() ?? "";
                     if (name is null)
                         continue;
@@ -170,17 +181,58 @@ public partial class MainViewModel : ViewModelBase
                         switch (name)
                         {
                             case "12 SONDE EXTERIEUR":
-                                InOutViewModel.OutTemperature = Decimal.Parse(value, CultureInfo.InvariantCulture );
+                                InOutViewModel.OutTemperature = Decimal.Parse(value, CultureInfo.InvariantCulture);
                                 break;
                             case "M1 S2 SONDE AMBIANCE MUR CHAUFFANT ":
-                                InOutViewModel.InTemperature = Decimal.Parse(value, CultureInfo.InvariantCulture );
+                                InOutViewModel.InTemperature = Decimal.Parse(value, CultureInfo.InvariantCulture);
                                 break;
                             case "M1 S3 SONDE DE COMPENSATION INTERRUPTEUR CHAUFFAGE":
-                                InOutViewModel.InstructionTemperature = Decimal.Parse(value, CultureInfo.InvariantCulture );
+                                InOutViewModel.InstructionTemperature = Decimal.Parse(value, CultureInfo.InvariantCulture);
                                 break;
                         }
                         continue;
                     }
+                    if (data is UpperHotWaterViewModel upperHotWaterViewModel)
+                    {
+                        upperHotWaterViewModel.Value = element.GetProperty("value").GetString();
+                        continue;
+                    }
+                    if (data is MidHotWaterViewModel midHotWaterViewModel)
+                    {
+                        midHotWaterViewModel.Value = element.GetProperty("value").GetString();
+                        continue;
+                    }
+                    if (data is LowHotWaterViewModel lowHotWaterViewModel)
+                    {
+                        lowHotWaterViewModel.Value = element.GetProperty("value").GetString();
+                        continue;
+                    }
+                    if (data is StoveViewModel stoveViewModel)
+                    {
+                        stoveViewModel.Value = element.GetProperty("value").GetString();
+                        continue;
+                    }
+                    if (data is SolarPanelViewModel solarPanelViewModel)
+                    {
+                        solarPanelViewModel.Value = element.GetProperty("value").GetString();
+                        continue;
+                    }
+                    if (name == "M1 R1 POMPE CHAUFFAGE MUR CHAUFFANT ")
+                    {
+                        PompeMur = element.GetProperty("value").GetString();
+                        continue;
+                    }
+                    if (name == "R5 POMPE SOLAIRE PRIMAIRE ")
+                    {
+                        PompeSolaire = element.GetProperty("value").GetString();
+                        continue;
+                    }
+                    if (name == "R9 POMPE BOUILLEUR")
+                    {
+                        PompePoele = element.GetProperty("value").GetString();
+                        continue;
+                    }
+
                     if (data is DataViewModel dataViewModel)
                     {
                         dataViewModel.Id = element.GetProperty("id").GetString();
@@ -380,7 +432,7 @@ public partial class MainViewModel : ViewModelBase
             //     return new DataViewModel();
             // case "Sortie B PWM SECONDAIRE":
             //     return new DataViewModel();
-            case "7 SONDE BALLON DEPART ":
+            case "7 SONDE BALLON DÉPART ":
                 {
                     MidHotWaterViewModel = new MidHotWaterViewModel();
                     return MidHotWaterViewModel;
