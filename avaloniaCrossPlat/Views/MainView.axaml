@@ -11,7 +11,7 @@
   d:DesignHeight="790"
   d:DesignWidth="390"
   x:DataType="vm:MainViewModel"
-  Background="#001219"
+      Background="#ffffff"
   mc:Ignorable="d">
   <Design.DataContext>
     <!--
@@ -50,7 +50,6 @@
     </controls:KeyPadView>-->
     <Grid
       Grid.Row="1"
-      Margin="0"
       Background="#ffffff"
       ColumnDefinitions="*,*,*"
       RowDefinitions="*,*,*,*">
@@ -74,7 +73,7 @@
             FontSize="30"
             FontWeight="Bold"
             Foreground="#1f1f1f"
-            Text="{CompiledBinding InOutViewModel.InTemperature}" />
+            Text="{CompiledBinding InOutViewModel.InTemperature, StringFormat=' {0}°'}}" />
         </Grid>
       </Border>
       <Border
@@ -96,7 +95,7 @@
             FontSize="30"
             FontWeight="Bold"
             Foreground="#1f1f1f"
-            Text="{CompiledBinding InOutViewModel.OutTemperature}" />
+            Text="{CompiledBinding InOutViewModel.OutTemperature, StringFormat=' {0}°'}}" />
         </Grid>
       </Border>
       <Border
@@ -141,7 +140,7 @@
             FontSize="30"
             FontWeight="Bold"
             Foreground="#1f1f1f"
-            Text="{CompiledBinding UpperHotWaterViewModel.Value}" />
+            Text="{CompiledBinding UpperHotWaterViewModel.Value, StringFormat=' {0}°'}}" />
         </Grid>
       </Border>
       <Border
@@ -163,7 +162,7 @@
             FontSize="30"
             FontWeight="Bold"
             Foreground="#1f1f1f"
-            Text="{CompiledBinding MidHotWaterViewModel.Value}" />
+            Text="{CompiledBinding MidHotWaterViewModel.Value, StringFormat=' {0}°'}}" />
         </Grid>
       </Border>
       <Border
@@ -185,7 +184,7 @@
             FontSize="30"
             FontWeight="Bold"
             Foreground="#1f1f1f"
-            Text="{CompiledBinding LowHotWaterViewModel.Value}" />
+            Text="{CompiledBinding LowHotWaterViewModel.Value, StringFormat=' {0}°'}}" />
         </Grid>
       </Border>
       <!--  Poele  -->
@@ -209,7 +208,7 @@
             FontSize="30"
             FontWeight="Bold"
             Foreground="#1f1f1f"
-            Text="{CompiledBinding PompePoele}" />
+            Text="{CompiledBinding PompePoele, StringFormat=' {0}%'}}" />
           <Viewbox
             Grid.Row="2"
             Width="40"
@@ -246,7 +245,7 @@
             FontSize="30"
             FontWeight="Bold"
             Foreground="#1f1f1f"
-            Text="{CompiledBinding StoveViewModel.Value}" />
+            Text="{CompiledBinding StoveViewModel.Value, StringFormat=' {0}°'}}" />
         </Grid>
       </Border>
       <!--  Solaire  -->
@@ -269,7 +268,7 @@
             FontSize="30"
             FontWeight="Bold"
             Foreground="#1f1f1f"
-            Text="{CompiledBinding PompeSolaire}" />
+            Text="{CompiledBinding PompeSolaire, StringFormat=' {0}%'}}" />
           <Viewbox
             Grid.Row="2"
             Width="40"
@@ -305,7 +304,30 @@
             FontSize="30"
             Foreground="#1f1f1f"
             FontWeight="Bold"
-            Text="{CompiledBinding SolarPanelViewModel.Value}" />
+            Text="{CompiledBinding SolarPanelViewModel.Value, StringFormat=' {0}°'}}" />
+        </Grid>
+      </Border>
+      <!-- Mur -->
+      <Border
+        Grid.Row="3"
+        Grid.Column="1"
+        Margin="0,10,10,10"
+        Background="#e0e0e0"
+        CornerRadius="20,20">
+        <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
+          <TextBlock
+            Grid.Row="0"
+            Margin="10"
+            FontSize="18"
+            Foreground="#1f1f1f"
+            Text="Chauffage" />
+          <TextBlock
+            Grid.Row="1"
+            Margin="10"
+            FontSize="30"
+            Foreground="#1f1f1f"
+            FontWeight="Bold"
+            Text="{CompiledBinding PompeMur, StringFormat=' {0}%'}}" />
         </Grid>
       </Border>
     </Grid>
