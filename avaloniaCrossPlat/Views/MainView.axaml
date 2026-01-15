@@ -70,7 +70,7 @@
           <TextBlock
             Grid.Row="0"
             Margin="10"
-            FontSize="16"
+            FontSize="14"
             Foreground="#1f1f1f"
             Text="Intérieur" />
           <TextBlock
@@ -93,7 +93,7 @@
           <TextBlock
             Grid.Row="0"
             Margin="10"
-            FontSize="16"
+            FontSize="14"
             Foreground="#1f1f1f"
             Text="Extérieur" />
           <TextBlock
@@ -116,7 +116,7 @@
           <TextBlock
             Grid.Row="0"
             Margin="10"
-            FontSize="16"
+            FontSize="14"
             Foreground="#1f1f1f"
             Text="Consigne" />
           <TextBlock
@@ -140,7 +140,7 @@
           <TextBlock
             Grid.Row="0"
             Margin="10"
-            FontSize="16"
+            FontSize="14"
             Foreground="#1f1f1f"
             Text="" />
           <TextBlock
@@ -163,7 +163,7 @@
           <TextBlock
             Grid.Row="0"
             Margin="10"
-            FontSize="16"
+            FontSize="14"
             Foreground="#1f1f1f"
             Text="" />
           <TextBlock
@@ -186,7 +186,7 @@
           <TextBlock
             Grid.Row="0"
             Margin="10"
-            FontSize="16"
+            FontSize="14"
             Foreground="#1f1f1f"
             Text="" />
           <TextBlock
@@ -211,7 +211,7 @@
           <TextBlock
             Grid.Row="0"
             Margin="10"
-            FontSize="16"
+            FontSize="14"
             Foreground="#1f1f1f"
             Text="" />
           <TextBlock
@@ -267,7 +267,7 @@
           <TextBlock
             Grid.Row="0"
             Margin="10"
-            FontSize="16"
+            FontSize="14"
             Foreground="#1f1f1f"
             Text="Poêle" />
           <TextBlock
@@ -291,7 +291,7 @@
           <TextBlock
             Grid.Row="0"
             Margin="10"
-            FontSize="16"
+            FontSize="14"
             Foreground="#1f1f1f"
             Text="" />
           <Border
@@ -341,7 +341,7 @@
           <TextBlock
             Grid.Row="0"
             Margin="10"
-            FontSize="16"
+            FontSize="14"
             Foreground="#1f1f1f"
             Text="Solaire" />
           <TextBlock
@@ -365,7 +365,7 @@
           <TextBlock
             Grid.Row="0"
             Margin="10"
-            FontSize="16"
+            FontSize="14"
             Foreground="#1f1f1f"
             Text="Chauffage" />
           <Border
