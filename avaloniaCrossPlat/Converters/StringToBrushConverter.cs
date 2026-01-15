@@ -25,7 +25,7 @@ public class StringToBrushConverter : IValueConverter
                 "#9b2226"
                 };
                 
-            if (Decimal.TryParse(value.ToString().Replace('.',','), out var decValue))
+            if (Decimal.TryParse((value.ToString() ?? "").Replace('.',','), out var decValue))
             {
                 if (decValue < 0)
                     return new SolidColorBrush(Color.Parse(array[1]));

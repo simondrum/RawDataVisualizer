@@ -39,6 +39,16 @@ public partial class MainViewModel : ViewModelBase
     private string? _pompeMur = null;
 
     [ObservableProperty]
+    private bool _pompeSolaireActivated = false;
+
+    [ObservableProperty]
+    private bool _pompePoeleActivated = false;
+
+    [ObservableProperty]
+    private bool _pompeMurActivated = false;
+
+
+    [ObservableProperty]
     private double _refreshProgress = 100; // 0 → 100
     private readonly TimeSpan _refreshInterval = TimeSpan.FromSeconds(30);
     private readonly TimeSpan _uiTick = TimeSpan.FromMilliseconds(100);
@@ -148,23 +158,35 @@ public partial class MainViewModel : ViewModelBase
                 if (name == "M1 R1 POMPE CHAUFFAGE MUR CHAUFFANT ")
                 {
                     PompeMur = element.GetProperty("value").GetString();
+                    if (double.TryParse(PompeMur, out var outvalue))
+                    {
+                        PompeMurActivated = outvalue > 0;
+                    }
                     continue;
                 }
                 if (name == "R5 POMPE SOLAIRE PRIMAIRE ")
                 {
                     PompeSolaire = element.GetProperty("value").GetString();
+                    if (double.TryParse(PompeSolaire, out var outvalue))
+                    {
+                        PompeSolaireActivated = outvalue > 0;
+                    }
                     continue;
                 }
                 if (name == "R9 POMPE BOUILLEUR")
                 {
                     PompePoele = element.GetProperty("value").GetString();
+                    if (double.TryParse(PompePoele, out var outvalue))
+                    {
+                        PompePoeleActivated = outvalue > 0;
+                    }
                     continue;
                 }
 
                 if (data is DataViewModel dataViewModel)
                 {
                     dataViewModel.Id = element.GetProperty("id").GetString();
-                    dataViewModel.Name = element.GetProperty("name").GetString();                    
+                    dataViewModel.Name = element.GetProperty("name").GetString();
                     if (Decimal.TryParse(element.GetProperty("value").GetString(), CultureInfo.InvariantCulture, out var valueDouble))
                         dataViewModel.Value = valueDouble;
                     dataViewModel.Unit = element.GetProperty("unit").GetString();
@@ -301,15 +323,13 @@ public partial class MainViewModel : ViewModelBase
                         StoveViewModel = new StoveViewModel();
                     return StoveViewModel;
                 }
-            // case "R9 POMPE BOUILLEUR":
-            //     return "Poele chauffe eau";
-            case "12 SONDE EXTERIEUR":
+            case "M1 S2 SONDE AMBIANCE MUR CHAUFFANT ":
                 {
                     if (InViewModel == null)
                         InViewModel = new DataViewModel();
                     return InViewModel;
                 }
-            case "M1 S2 SONDE AMBIANCE MUR CHAUFFANT ":
+            case "12 SONDE EXTERIEUR":
                 {
                     if (OutViewModel == null)
                         OutViewModel = new DataViewModel();

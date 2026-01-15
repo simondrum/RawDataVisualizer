@@ -217,23 +217,41 @@
             Margin="10"
             FontSize="22"
             FontWeight="Bold"
-            Foreground="#1f1f1f"
-            Text="{CompiledBinding PompePoele, StringFormat=' {0}%'}}" />
-          <Viewbox
-            Grid.Row="2"
+            Foreground="#1f1f1f" />
+          <Border
+            Grid.Row="0"
+            Grid.RowSpan="4"
             Width="40"
-            Height="40"
-            Classes="Arrow"
-            RenderTransformOrigin="0.5,0.5">
-            <Path Fill="#3d3d3d" Stretch="Uniform">
-              <Path.Data>
-                <GeometryGroup>
-                  <PathGeometry Figures="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" />
-                </GeometryGroup>
-              </Path.Data>
-            </Path>
-          </Viewbox>
-
+            Height="80"
+            Background="#f1bbbc"
+            CornerRadius="20"
+            IsVisible="{CompiledBinding PompePoeleActivated}">
+            <Border
+              Width="30"
+              Height="30"
+              Margin="3"
+              VerticalAlignment="Bottom"
+              Background="#bc2f32"
+              BoxShadow="3 3 10 0 #bc2f32"
+              CornerRadius="15" />
+          </Border>
+          <Border
+            Grid.Row="0"
+            Grid.RowSpan="4"
+            Width="40"
+            Height="80"
+            Background="#f5f5f5"
+            CornerRadius="20"
+            IsVisible="{CompiledBinding !PompePoeleActivated}">
+            <Border
+              Width="30"
+              Height="30"
+              Margin="3"
+              VerticalAlignment="Top"
+              Background="#3d3d3d"
+              BoxShadow="3 3 10 0 #e0e0e0"
+              CornerRadius="15" />
+          </Border>
         </Grid>
       </Border>
       <Border
@@ -274,27 +292,40 @@
             FontSize="16"
             Foreground="#1f1f1f"
             Text="" />
-          <TextBlock
-            Grid.Row="1"
-            Margin="10"
-            FontSize="22"
-            FontWeight="Bold"
-            Foreground="#1f1f1f"
-            Text="{CompiledBinding PompeSolaire, StringFormat=' {0}%'}}" />
-          <Viewbox
-            Grid.Row="2"
+          <Border
+            Grid.Row="0"
+            Grid.RowSpan="4"
             Width="40"
-            Height="40"
-            Classes="Arrow"
-            RenderTransformOrigin="0.5,0.5">
-            <Path Fill="#3d3d3d" Stretch="Uniform">
-              <Path.Data>
-                <GeometryGroup>
-                  <PathGeometry Figures="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" />
-                </GeometryGroup>
-              </Path.Data>
-            </Path>
-          </Viewbox>
+            Height="80"
+            Background="#f1bbbc"
+            CornerRadius="20"
+            IsVisible="{CompiledBinding PompeSolaireActivated}">
+            <Border
+              Width="30"
+              Height="30"
+              Margin="3"
+              VerticalAlignment="Bottom"
+              Background="#bc2f32"
+              BoxShadow="3 3 10 0 #bc2f32"
+              CornerRadius="15" />
+          </Border>
+          <Border
+            Grid.Row="0"
+            Grid.RowSpan="4"
+            Width="40"
+            Height="80"
+            Background="#f5f5f5"
+            CornerRadius="20"
+            IsVisible="{CompiledBinding !PompeSolaireActivated}">
+            <Border
+              Width="30"
+              Height="30"
+              Margin="3"
+              VerticalAlignment="Top"
+              Background="#3d3d3d"
+              BoxShadow="3 3 10 0 #e0e0e0"
+              CornerRadius="15" />
+          </Border>
         </Grid>
       </Border>
       <Border
@@ -335,13 +366,40 @@
             FontSize="16"
             Foreground="#1f1f1f"
             Text="Chauffage" />
-          <TextBlock
-            Grid.Row="1"
-            Margin="10"
-            FontSize="22"
-            FontWeight="Bold"
-            Foreground="#1f1f1f"
-            Text="{CompiledBinding PompeMur, StringFormat=' {0}%'}}" />
+          <Border
+            Grid.Row="0"
+            Grid.RowSpan="4"
+            Width="40"
+            Height="80"
+            Background="#f1bbbc"
+            CornerRadius="20"
+            IsVisible="{CompiledBinding PompeMurActivated}">
+            <Border
+              Width="30"
+              Height="30"
+              Margin="3"
+              VerticalAlignment="Bottom"
+              Background="#bc2f32"
+              BoxShadow="3 3 10 0 #bc2f32"
+              CornerRadius="15" />
+          </Border>
+          <Border
+            Grid.Row="0"
+            Grid.RowSpan="4"
+            Width="40"
+            Height="80"
+            Background="#f5f5f5"
+            CornerRadius="20"
+            IsVisible="{CompiledBinding !PompeMurActivated}">
+            <Border
+              Width="30"
+              Height="30"
+              Margin="3"
+              VerticalAlignment="Top"
+              Background="#3d3d3d"
+              BoxShadow="3 3 10 0 #e0e0e0"
+              CornerRadius="15" />
+          </Border>
         </Grid>
       </Border>
     </Grid>
