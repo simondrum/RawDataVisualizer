@@ -28,7 +28,7 @@
     <ProgressBar
       Grid.Row="0"
       Height="10"
-      Margin="0,8,0,0"
+      Margin="5"
       IsVisible="{CompiledBinding IsDataValid}"
       Maximum="100"
       Minimum="0"
@@ -54,7 +54,7 @@
     <Grid
       Grid.Row="1"
       Background="#ffffff"
-      ColumnDefinitions="*,*,*,40"
+      ColumnDefinitions="100,100,100"
       RowDefinitions="*,*,*,*">
       <!--  Première ligne  -->
       <Border
@@ -62,7 +62,7 @@
         Grid.Column="0"
         Margin="10"
         Background="#e0e0e0"
-        BoxShadow="5 5 0 0 #1f1f1f"
+        BoxShadow="{Binding InViewModel.ColorTrend}"
         CornerRadius="20">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
           <TextBlock
@@ -77,7 +77,7 @@
             FontSize="22"
             FontWeight="Bold"
             Foreground="#1f1f1f"
-            Text="{CompiledBinding InOutViewModel.InTemperature, StringFormat=' {0}°'}}" />
+            Text="{CompiledBinding InViewModel.Value, StringFormat=' {0}°'}}" />
         </Grid>
       </Border>
       <Border
@@ -85,7 +85,7 @@
         Grid.Column="1"
         Margin="10"
         Background="#e0e0e0"
-        BoxShadow="5 5 0 0 #1f1f1f"
+        BoxShadow="{Binding OutViewModel.ColorTrend}"
         CornerRadius="20">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
           <TextBlock
@@ -100,7 +100,7 @@
             FontSize="22"
             FontWeight="Bold"
             Foreground="#1f1f1f"
-            Text="{CompiledBinding InOutViewModel.OutTemperature, StringFormat=' {0}°'}}" />
+            Text="{CompiledBinding OutViewModel.Value, StringFormat=' {0}°'}}" />
         </Grid>
       </Border>
       <Border
@@ -108,7 +108,7 @@
         Grid.Column="2"
         Margin="10"
         Background="#e0e0e0"
-        BoxShadow="5 5 0 0 #1f1f1f"
+        BoxShadow="{Binding InstructionViewModel.ColorTrend}"
         CornerRadius="20">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
           <TextBlock
@@ -123,7 +123,7 @@
             FontSize="22"
             FontWeight="Bold"
             Foreground="#1f1f1f"
-            Text="{CompiledBinding InOutViewModel.InstructionTemperature}" />
+            Text="{CompiledBinding InstructionViewModel.Value}" />
         </Grid>
       </Border>
       <!--  Ballon  -->

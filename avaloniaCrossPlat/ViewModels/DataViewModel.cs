@@ -23,6 +23,8 @@ public partial class DataViewModel : ViewModelBase
     private decimal? _value;
     private decimal? _oldvalue;
 
+    List<decimal> _oldvalueList = new List<decimal>();
+
     [ObservableProperty]
     private string? _unit;
 
@@ -46,18 +48,27 @@ public partial class DataViewModel : ViewModelBase
     {
         if (value != null)
         {
-            if (_oldvalue != null)
+            if (_oldvalue != null && _oldvalueList != null)
             {
-                if (value < _oldvalue)
+                decimal oldvalues = 0;
+                _oldvalueList.ForEach(x => oldvalues += x);
+                oldvalues = oldvalues / _oldvalueList.Count;
+                if (value < oldvalues)
                 {
                     ColorTrend = new BoxShadows(BoxShadow.Parse($@"5 5 0 0 #038387"));
                 }
-                else if (value > _oldvalue)
+                else if (value > oldvalues)
                 {
                     ColorTrend = new BoxShadows(BoxShadow.Parse($@"5 5 0 0 #bc2f32"));
                 }
             }
             _oldvalue = value;
+            if (_oldvalue != null)
+            {
+                if (_oldvalueList?.Count > 5)
+                    _oldvalueList.RemoveAt(0);
+                _oldvalueList?.Add((decimal)_oldvalue);
+            }
         }
     }
 }

@@ -40,7 +40,7 @@ public partial class MainViewModel : ViewModelBase
 
     [ObservableProperty]
     private double _refreshProgress = 100; // 0 → 100
-    private readonly TimeSpan _refreshInterval = TimeSpan.FromSeconds(10);
+    private readonly TimeSpan _refreshInterval = TimeSpan.FromSeconds(30);
     private readonly TimeSpan _uiTick = TimeSpan.FromMilliseconds(100);
     private DateTime _lastRefresh;
 
@@ -91,7 +91,11 @@ public partial class MainViewModel : ViewModelBase
 
     #region data indicators
     [ObservableProperty]
-    private InOutViewModel? _inOutViewModel;
+    private DataViewModel? _inViewModel;
+    [ObservableProperty]
+    private DataViewModel? _outViewModel;
+    [ObservableProperty]
+    private DataViewModel? _instructionViewModel;
     [ObservableProperty]
     private LowHotWaterViewModel? _lowHotWaterViewModel;
     [ObservableProperty]
@@ -120,8 +124,6 @@ public partial class MainViewModel : ViewModelBase
             if (array.Count() == 0)
                 throw new ArgumentNullException();
 
-            InOutViewModel = new InOutViewModel();
-
             foreach (var element in array)
             {
                 string? name = null;
@@ -143,47 +145,6 @@ public partial class MainViewModel : ViewModelBase
 
 
                 ViewModelBase? data = GetViewModel(name);
-                if (data is InOutViewModel)
-                {
-                    switch (name)
-                    {
-                        case "12 SONDE EXTERIEUR":
-                            InOutViewModel.OutTemperature = Decimal.Parse(value, CultureInfo.InvariantCulture);
-                            break;
-                        case "M1 S2 SONDE AMBIANCE MUR CHAUFFANT ":
-                            InOutViewModel.InTemperature = Decimal.Parse(value, CultureInfo.InvariantCulture);
-                            break;
-                        case "M1 S3 SONDE DE COMPENSATION INTERRUPTEUR CHAUFFAGE":
-                            InOutViewModel.InstructionTemperature = Decimal.Parse(value, CultureInfo.InvariantCulture);
-                            break;
-                    }
-                    continue;
-                }
-                // if (data is UpperHotWaterViewModel upperHotWaterViewModel)
-                // {
-                //     upperHotWaterViewModel.Value = element.GetProperty("value").GetString();
-                //     continue;
-                // }
-                // if (data is MidHotWaterViewModel midHotWaterViewModel)
-                // {
-                //     midHotWaterViewModel.Value = element.GetProperty("value").GetString();
-                //     continue;
-                // }
-                // if (data is LowHotWaterViewModel lowHotWaterViewModel)
-                // {
-                //     lowHotWaterViewModel.Value = element.GetProperty("value").GetString();
-                //     continue;
-                // }
-                // if (data is StoveViewModel stoveViewModel)
-                // {
-                //     stoveViewModel.Value = element.GetProperty("value").GetString();
-                //     continue;
-                // }
-                // if (data is SolarPanelViewModel solarPanelViewModel)
-                // {
-                //     solarPanelViewModel.Value = element.GetProperty("value").GetString();
-                //     continue;
-                // }
                 if (name == "M1 R1 POMPE CHAUFFAGE MUR CHAUFFANT ")
                 {
                     PompeMur = element.GetProperty("value").GetString();
@@ -343,11 +304,23 @@ public partial class MainViewModel : ViewModelBase
             // case "R9 POMPE BOUILLEUR":
             //     return "Poele chauffe eau";
             case "12 SONDE EXTERIEUR":
-                return InOutViewModel;
+                {
+                    if (InViewModel == null)
+                        InViewModel = new DataViewModel();
+                    return InViewModel;
+                }
             case "M1 S2 SONDE AMBIANCE MUR CHAUFFANT ":
-                return InOutViewModel;
+                {
+                    if (OutViewModel == null)
+                        OutViewModel = new DataViewModel();
+                    return OutViewModel;
+                }
             case "M1 S3 SONDE DE COMPENSATION INTERRUPTEUR CHAUFFAGE":
-                return InOutViewModel;
+                {
+                    if (InstructionViewModel == null)
+                        InstructionViewModel = new DataViewModel();
+                    return InstructionViewModel;
+                }
             // case "3 SONDE ENTREE CHAUDE ECHANGEUR SOLAIRE ":
             //     return new DataViewModel();
             // case "Sortie B PWM SECONDAIRE":
