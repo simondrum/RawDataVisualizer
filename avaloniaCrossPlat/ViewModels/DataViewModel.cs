@@ -40,7 +40,7 @@ public partial class DataViewModel : ViewModelBase
 
     public DataViewModel()
     {
-        ColorTrend = new BoxShadows(BoxShadow.Parse("5 5 0 0 #1f1f1f"));
+        ColorTrend = new BoxShadows(BoxShadow.Parse("8 8 10 5 #1f1f1f"));
         ;
     }
 
@@ -55,11 +55,11 @@ public partial class DataViewModel : ViewModelBase
                 oldvalues = oldvalues / _oldvalueList.Count;
                 if (value < oldvalues)
                 {
-                    ColorTrend = new BoxShadows(BoxShadow.Parse($@"5 5 0 0 #038387"));
+                    ColorTrend = new BoxShadows(BoxShadow.Parse($@"8 8 10 5 #038387"));
                 }
                 else if (value > oldvalues)
                 {
-                    ColorTrend = new BoxShadows(BoxShadow.Parse($@"5 5 0 0 #bc2f32"));
+                    ColorTrend = new BoxShadows(BoxShadow.Parse($@"8 8 10 5 #bc2f32"));
                 }
             }
             _oldvalue = value;
