@@ -32,58 +32,23 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     private string? _pompeSolaire = null;
 
-[ObservableProperty]
+    [ObservableProperty]
     private string? _pompePoele = null;
 
     [ObservableProperty]
     private string? _pompeMur = null;
 
     [ObservableProperty]
-    private ObservableCollection<DataViewModel> _data = new ObservableCollection<DataViewModel>();
-    [ObservableProperty]
-    private ObservableCollection<DataViewModel> _dataTemp = new ObservableCollection<DataViewModel>();
-    [ObservableProperty]
-    private ObservableCollection<DataViewModel> _dataPourcent = new ObservableCollection<DataViewModel>();
-
-    [ObservableProperty]
     private double _refreshProgress = 100; // 0 → 100
-    private readonly TimeSpan _refreshInterval = TimeSpan.FromSeconds(30);
+    private readonly TimeSpan _refreshInterval = TimeSpan.FromSeconds(10);
     private readonly TimeSpan _uiTick = TimeSpan.FromMilliseconds(100);
     private DateTime _lastRefresh;
-    private IServiceProvider Services;
 
     public MainViewModel()
     {
         Code = "28559";
-        return;
-        if (Application.Current is App app)
-        {
-            Services = app.Services;
-            if (Services != null)
-            {
-                Console.WriteLine("Services is not null");
-                try
-                {
-                    var serviceStorage = Services.GetRequiredService<IClientContextStorage>();
-                    if (serviceStorage != null)
-                    {
-                        Console.WriteLine("serviceStorage is not null");
-                        var clientId = serviceStorage.GetClientId();
-
-                        if (!String.IsNullOrEmpty(clientId))
-                        {
-                            Code = clientId;
-                        }
-                        Console.WriteLine($"clientId => {clientId}");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-            }
-            //     Console.WriteLine($"ClientId => {Services.GetRequiredService<IClientContextStorage>()?.GetClientId()}");
-        }
+        StartGlobalTimer();
+        StartAnimationTimer();
     }
 
     partial void OnCodeChanged(string? value)
@@ -139,6 +104,7 @@ public partial class MainViewModel : ViewModelBase
     private UpperHotWaterViewModel? _upperHotWaterViewModel;
     #endregion
 
+    double fakeCelsius = 0;
     private async void LoadData()
     {
         try
@@ -155,143 +121,96 @@ public partial class MainViewModel : ViewModelBase
             if (array.Count() == 0)
                 throw new ArgumentNullException();
 
-            List<DataViewModel> tempData = new List<DataViewModel>(); ;
-
             InOutViewModel = new InOutViewModel();
 
             foreach (var element in array)
             {
+                string? name = null;
                 try
                 {
-                    string? name = element.GetProperty("name").GetString() ?? "";
-                    if (name is null)
-                        continue;
-                    ViewModelBase data = GetViewModel(name);
-                    if (data is null)
-                        continue;
-
-                    string? nullValue = element.GetProperty("value").GetString();
-                    if (nullValue is null)
-                        continue;
-
-                    string value = (string)nullValue;
-
-                    if (data is InOutViewModel)
-                    {
-                        switch (name)
-                        {
-                            case "12 SONDE EXTERIEUR":
-                                InOutViewModel.OutTemperature = Decimal.Parse(value, CultureInfo.InvariantCulture);
-                                break;
-                            case "M1 S2 SONDE AMBIANCE MUR CHAUFFANT ":
-                                InOutViewModel.InTemperature = Decimal.Parse(value, CultureInfo.InvariantCulture);
-                                break;
-                            case "M1 S3 SONDE DE COMPENSATION INTERRUPTEUR CHAUFFAGE":
-                                InOutViewModel.InstructionTemperature = Decimal.Parse(value, CultureInfo.InvariantCulture);
-                                break;
-                        }
-                        continue;
-                    }
-                    if (data is UpperHotWaterViewModel upperHotWaterViewModel)
-                    {
-                        upperHotWaterViewModel.Value = element.GetProperty("value").GetString();
-                        continue;
-                    }
-                    if (data is MidHotWaterViewModel midHotWaterViewModel)
-                    {
-                        midHotWaterViewModel.Value = element.GetProperty("value").GetString();
-                        continue;
-                    }
-                    if (data is LowHotWaterViewModel lowHotWaterViewModel)
-                    {
-                        lowHotWaterViewModel.Value = element.GetProperty("value").GetString();
-                        continue;
-                    }
-                    if (data is StoveViewModel stoveViewModel)
-                    {
-                        stoveViewModel.Value = element.GetProperty("value").GetString();
-                        continue;
-                    }
-                    if (data is SolarPanelViewModel solarPanelViewModel)
-                    {
-                        solarPanelViewModel.Value = element.GetProperty("value").GetString();
-                        continue;
-                    }
-                    if (name == "M1 R1 POMPE CHAUFFAGE MUR CHAUFFANT ")
-                    {
-                        PompeMur = element.GetProperty("value").GetString();
-                        continue;
-                    }
-                    if (name == "R5 POMPE SOLAIRE PRIMAIRE ")
-                    {
-                        PompeSolaire = element.GetProperty("value").GetString();
-                        continue;
-                    }
-                    if (name == "R9 POMPE BOUILLEUR")
-                    {
-                        PompePoele = element.GetProperty("value").GetString();
-                        continue;
-                    }
-
-                    if (data is DataViewModel dataViewModel)
-                    {
-                        dataViewModel.Id = element.GetProperty("id").GetString();
-                        dataViewModel.Name = element.GetProperty("name").GetString();
-                        dataViewModel.Value = element.GetProperty("value").GetString();
-                        dataViewModel.Unit = element.GetProperty("unit").GetString();
-                        if (data != null)
-                        {
-
-                            if (!String.IsNullOrEmpty(dataViewModel.Name))
-                            {
-                                dataViewModel.Favorit = IsFavorite(dataViewModel.Name);
-                                dataViewModel.Title = GetLibelle(dataViewModel.Name);
-                            }
-                            tempData.Add(dataViewModel);
-                        }
-                    }
+                    name = element.GetProperty("name").GetString() ?? "";
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    Console.WriteLine($"Error => {ex.Message} \n {element}");
+                }
+                if (String.IsNullOrEmpty(name))
+                    continue;
+                string? nullValue = element.GetProperty("value").GetString();
+                if (nullValue is null)
+                    continue;
+
+                string value = nullValue;
+
+
+                ViewModelBase? data = GetViewModel(name);
+                if (data is InOutViewModel)
+                {
+                    switch (name)
+                    {
+                        case "12 SONDE EXTERIEUR":
+                            InOutViewModel.OutTemperature = Decimal.Parse(value, CultureInfo.InvariantCulture);
+                            break;
+                        case "M1 S2 SONDE AMBIANCE MUR CHAUFFANT ":
+                            InOutViewModel.InTemperature = Decimal.Parse(value, CultureInfo.InvariantCulture);
+                            break;
+                        case "M1 S3 SONDE DE COMPENSATION INTERRUPTEUR CHAUFFAGE":
+                            InOutViewModel.InstructionTemperature = Decimal.Parse(value, CultureInfo.InvariantCulture);
+                            break;
+                    }
+                    continue;
+                }
+                // if (data is UpperHotWaterViewModel upperHotWaterViewModel)
+                // {
+                //     upperHotWaterViewModel.Value = element.GetProperty("value").GetString();
+                //     continue;
+                // }
+                // if (data is MidHotWaterViewModel midHotWaterViewModel)
+                // {
+                //     midHotWaterViewModel.Value = element.GetProperty("value").GetString();
+                //     continue;
+                // }
+                // if (data is LowHotWaterViewModel lowHotWaterViewModel)
+                // {
+                //     lowHotWaterViewModel.Value = element.GetProperty("value").GetString();
+                //     continue;
+                // }
+                // if (data is StoveViewModel stoveViewModel)
+                // {
+                //     stoveViewModel.Value = element.GetProperty("value").GetString();
+                //     continue;
+                // }
+                // if (data is SolarPanelViewModel solarPanelViewModel)
+                // {
+                //     solarPanelViewModel.Value = element.GetProperty("value").GetString();
+                //     continue;
+                // }
+                if (name == "M1 R1 POMPE CHAUFFAGE MUR CHAUFFANT ")
+                {
+                    PompeMur = element.GetProperty("value").GetString();
+                    continue;
+                }
+                if (name == "R5 POMPE SOLAIRE PRIMAIRE ")
+                {
+                    PompeSolaire = element.GetProperty("value").GetString();
+                    continue;
+                }
+                if (name == "R9 POMPE BOUILLEUR")
+                {
+                    PompePoele = element.GetProperty("value").GetString();
+                    continue;
                 }
 
-            }
-            Console.WriteLine("3");
-            string tempUnit = "";
-            foreach (var data in tempData.OrderBy(x => x.Unit))
-            {
-                if (tempUnit != data.Unit && data.Unit != null)
-
+                if (data is DataViewModel dataViewModel)
                 {
-                    tempUnit = data.Unit;
-                    Console.WriteLine($"===== {tempUnit}");
-
-                }
-                Console.WriteLine($"{data.Name}");
-            }
-            Console.WriteLine("6");
-            Console.WriteLine("7");
-            if (tempData != null && tempData.Count > 0)
-            {
-                DataTemp = new ObservableCollection<DataViewModel>(tempData.Where(x => x.Unit == " °C").OrderBy(x => x.Favorit));
-                DataPourcent = new ObservableCollection<DataViewModel>(tempData.Where(x => x.Unit == " %").OrderBy(x => x.Favorit));
-                Data = new ObservableCollection<DataViewModel>(tempData);
-                if (IsDataValid == null || !(bool)IsDataValid)
-                {
-                    IsDataValid = true;
-                    Error = false;
-                    try
-                    {
-                        Services.GetRequiredService<IClientContextStorage>()?.SetClientId(Code);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex);
-                    }
-                    StartGlobalTimer();
-                    StartAnimationTimer();
+                    dataViewModel.Id = element.GetProperty("id").GetString();
+                    dataViewModel.Name = element.GetProperty("name").GetString();                    
+                    if (Decimal.TryParse(element.GetProperty("value").GetString(), CultureInfo.InvariantCulture, out var valueDouble))
+                        dataViewModel.Value = valueDouble + (decimal)fakeCelsius;
+                    dataViewModel.Unit = element.GetProperty("unit").GetString();
                 }
             }
+            fakeCelsius++;
         }
         catch (Exception ex)
         {
@@ -399,7 +318,7 @@ public partial class MainViewModel : ViewModelBase
 
     }
 
-    private ViewModelBase? GetViewModel(string? name)
+    private ViewModelBase? GetViewModel(string name)
     {
         switch (name)
         {
@@ -407,17 +326,20 @@ public partial class MainViewModel : ViewModelBase
             //     return "Chauffage allumé";
             case "1 SONDE CAPTEUR":
                 {
-                    SolarPanelViewModel = new SolarPanelViewModel();
+                    if (SolarPanelViewModel == null)
+                        SolarPanelViewModel = new SolarPanelViewModel();
                     return SolarPanelViewModel;
                 }
             case "5 SONDE HAUT BALLON ECS":
                 {
-                    UpperHotWaterViewModel = new UpperHotWaterViewModel();
+                    if (UpperHotWaterViewModel == null)
+                        UpperHotWaterViewModel = new UpperHotWaterViewModel();
                     return UpperHotWaterViewModel;
                 }
             case "8 SONDE POELE":
                 {
-                    StoveViewModel = new StoveViewModel();
+                    if (StoveViewModel == null)
+                        StoveViewModel = new StoveViewModel();
                     return StoveViewModel;
                 }
             // case "R9 POMPE BOUILLEUR":
@@ -434,16 +356,18 @@ public partial class MainViewModel : ViewModelBase
             //     return new DataViewModel();
             case "7 SONDE BALLON DÉPART ":
                 {
-                    MidHotWaterViewModel = new MidHotWaterViewModel();
+                    if (MidHotWaterViewModel == null)
+                        MidHotWaterViewModel = new MidHotWaterViewModel();
                     return MidHotWaterViewModel;
                 }
             case "2 SONDE BAS BALLON ":
                 {
-                    LowHotWaterViewModel = new LowHotWaterViewModel();
+                    if (LowHotWaterViewModel == null)
+                        LowHotWaterViewModel = new LowHotWaterViewModel();
                     return LowHotWaterViewModel;
                 }
             default:
-                return new DataViewModel(); ;
+                return null; // new DataViewModel(); ;
         }
 
     }

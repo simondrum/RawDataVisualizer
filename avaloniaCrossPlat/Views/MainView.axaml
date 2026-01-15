@@ -3,13 +3,14 @@
   xmlns="https://github.com/avaloniaui"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:controls="using:avaloniaCrossPlat.Controls"
+  xmlns:converters="using:avaloniaCrossPlat.Converters"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:vm="using:avaloniaCrossPlat.ViewModels"
-  d:DesignHeight="790"
-  d:DesignWidth="390"
+  d:DesignHeight="700"
+  d:DesignWidth="350"
   x:DataType="vm:MainViewModel"
-      Background="#ffffff"
+  Background="#ffffff"
   mc:Ignorable="d">
   <Design.DataContext>
     <!--
@@ -18,6 +19,10 @@
     -->
     <vm:MainViewModel />
   </Design.DataContext>
+
+  <UserControl.Resources>
+    <converters:BoxShadowConverter x:Key="BoxShadowConverter" />
+  </UserControl.Resources>
 
   <Grid RowDefinitions="Auto,*">
     <ProgressBar
@@ -57,19 +62,19 @@
         Grid.Column="0"
         Margin="10"
         Background="#e0e0e0"
-        CornerRadius="20"
-        BoxShadow="5 5 0 0 #1f1f1f">
+        BoxShadow="5 5 0 0 #1f1f1f"
+        CornerRadius="20">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
           <TextBlock
             Grid.Row="0"
             Margin="10"
-            FontSize="18"
+            FontSize="16"
             Foreground="#1f1f1f"
             Text="Intérieur" />
           <TextBlock
             Grid.Row="1"
             Margin="10"
-            FontSize="30"
+            FontSize="22"
             FontWeight="Bold"
             Foreground="#1f1f1f"
             Text="{CompiledBinding InOutViewModel.InTemperature, StringFormat=' {0}°'}}" />
@@ -86,13 +91,13 @@
           <TextBlock
             Grid.Row="0"
             Margin="10"
-            FontSize="18"
+            FontSize="16"
             Foreground="#1f1f1f"
             Text="Extérieur" />
           <TextBlock
             Grid.Row="1"
             Margin="10"
-            FontSize="30"
+            FontSize="22"
             FontWeight="Bold"
             Foreground="#1f1f1f"
             Text="{CompiledBinding InOutViewModel.OutTemperature, StringFormat=' {0}°'}}" />
@@ -109,13 +114,13 @@
           <TextBlock
             Grid.Row="0"
             Margin="10"
-            FontSize="18"
+            FontSize="16"
             Foreground="#1f1f1f"
             Text="Consigne" />
           <TextBlock
             Grid.Row="1"
             Margin="10"
-            FontSize="30"
+            FontSize="22"
             FontWeight="Bold"
             Foreground="#1f1f1f"
             Text="{CompiledBinding InOutViewModel.InstructionTemperature}" />
@@ -126,20 +131,20 @@
         Grid.Row="1"
         Grid.Column="0"
         Margin="10,10,10,0"
-        BoxShadow="5 5 0 0 #1f1f1f"
         Background="#e0e0e0"
+        BoxShadow="{Binding UpperHotWaterViewModel.ColorTrend}"
         CornerRadius="20,20,0,0">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
           <TextBlock
             Grid.Row="0"
             Margin="10"
-            FontSize="18"
+            FontSize="16"
             Foreground="#1f1f1f"
             Text="" />
           <TextBlock
             Grid.Row="1"
             Margin="10"
-            FontSize="30"
+            FontSize="22"
             FontWeight="Bold"
             Foreground="#1f1f1f"
             Text="{CompiledBinding UpperHotWaterViewModel.Value, StringFormat=' {0}°'}}" />
@@ -150,19 +155,19 @@
         Grid.Column="0"
         Margin="10,0,10,0"
         Background="#e0e0e0"
-        BoxShadow="5 5 0 0 #1f1f1f"
+        BoxShadow="{Binding MidHotWaterViewModel.ColorTrend}"
         CornerRadius="00">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
           <TextBlock
             Grid.Row="0"
             Margin="10"
-            FontSize="18"
+            FontSize="16"
             Foreground="#1f1f1f"
             Text="" />
           <TextBlock
             Grid.Row="1"
             Margin="10"
-            FontSize="30"
+            FontSize="22"
             FontWeight="Bold"
             Foreground="#1f1f1f"
             Text="{CompiledBinding MidHotWaterViewModel.Value, StringFormat=' {0}°'}}" />
@@ -173,19 +178,19 @@
         Grid.Column="0"
         Margin="10,0,10,10"
         Background="#e0e0e0"
-        BoxShadow="5 5 0 0 #1f1f1f"
+        BoxShadow="{Binding LowHotWaterViewModel.ColorTrend}"
         CornerRadius="0,0,20,20">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
           <TextBlock
             Grid.Row="0"
             Margin="10"
-            FontSize="18"
+            FontSize="16"
             Foreground="#1f1f1f"
             Text="" />
           <TextBlock
             Grid.Row="1"
             Margin="10"
-            FontSize="30"
+            FontSize="22"
             FontWeight="Bold"
             Foreground="#1f1f1f"
             Text="{CompiledBinding LowHotWaterViewModel.Value, StringFormat=' {0}°'}}" />
@@ -198,19 +203,19 @@
         Grid.Column="1"
         Margin="10,10,0,10"
         Background="#e0e0e0"
-        BoxShadow="5 5 0 0 #1f1f1f"
+        BoxShadow="{Binding StoveViewModel.ColorTrend}"
         CornerRadius="20,0,0,20">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
           <TextBlock
             Grid.Row="0"
             Margin="10"
-            FontSize="18"
+            FontSize="16"
             Foreground="#1f1f1f"
             Text="" />
           <TextBlock
             Grid.Row="1"
             Margin="10"
-            FontSize="30"
+            FontSize="22"
             FontWeight="Bold"
             Foreground="#1f1f1f"
             Text="{CompiledBinding PompePoele, StringFormat=' {0}%'}}" />
@@ -236,19 +241,19 @@
         Grid.Column="2"
         Margin="0,10,10,10"
         Background="#e0e0e0"
-        BoxShadow="5 5 0 0 #1f1f1f"
+        BoxShadow="{Binding StoveViewModel.ColorTrend}"
         CornerRadius="0,20,20,0">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
           <TextBlock
             Grid.Row="0"
             Margin="10"
-            FontSize="18"
+            FontSize="16"
             Foreground="#1f1f1f"
             Text="Poêle" />
           <TextBlock
             Grid.Row="1"
             Margin="10"
-            FontSize="30"
+            FontSize="22"
             FontWeight="Bold"
             Foreground="#1f1f1f"
             Text="{CompiledBinding StoveViewModel.Value, StringFormat=' {0}°'}}" />
@@ -260,19 +265,19 @@
         Grid.Column="1"
         Margin="10,10,0,10"
         Background="#e0e0e0"
-        BoxShadow="5 5 0 0 #1f1f1f"
+        BoxShadow="{Binding SolarPanelViewModel.ColorTrend}"
         CornerRadius="20,0,0,20">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
           <TextBlock
             Grid.Row="0"
             Margin="10"
-            FontSize="18"
+            FontSize="16"
             Foreground="#1f1f1f"
             Text="" />
           <TextBlock
             Grid.Row="1"
             Margin="10"
-            FontSize="30"
+            FontSize="22"
             FontWeight="Bold"
             Foreground="#1f1f1f"
             Text="{CompiledBinding PompeSolaire, StringFormat=' {0}%'}}" />
@@ -297,25 +302,25 @@
         Grid.Column="2"
         Margin="0,10,10,10"
         Background="#e0e0e0"
-        BoxShadow="5 5 0 0 #1f1f1f"
+        BoxShadow="{Binding SolarPanelViewModel.ColorTrend}"
         CornerRadius="0,20,20,0">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
           <TextBlock
             Grid.Row="0"
             Margin="10"
-            FontSize="18"
+            FontSize="16"
             Foreground="#1f1f1f"
             Text="Solaire" />
           <TextBlock
             Grid.Row="1"
             Margin="10"
-            FontSize="30"
-            Foreground="#1f1f1f"
+            FontSize="22"
             FontWeight="Bold"
+            Foreground="#1f1f1f"
             Text="{CompiledBinding SolarPanelViewModel.Value, StringFormat=' {0}°'}}" />
         </Grid>
       </Border>
-      <!-- Mur -->
+      <!--  Mur  -->
       <Border
         Grid.Row="3"
         Grid.Column="1"
@@ -327,15 +332,15 @@
           <TextBlock
             Grid.Row="0"
             Margin="10"
-            FontSize="18"
+            FontSize="16"
             Foreground="#1f1f1f"
             Text="Chauffage" />
           <TextBlock
             Grid.Row="1"
             Margin="10"
-            FontSize="30"
-            Foreground="#1f1f1f"
+            FontSize="22"
             FontWeight="Bold"
+            Foreground="#1f1f1f"
             Text="{CompiledBinding PompeMur, StringFormat=' {0}%'}}" />
         </Grid>
       </Border>
