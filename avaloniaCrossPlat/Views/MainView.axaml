@@ -6,8 +6,6 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:vm="using:avaloniaCrossPlat.ViewModels"
-  Width="390"
-  Height="790"
   d:DesignHeight="790"
   d:DesignWidth="390"
   x:DataType="vm:MainViewModel"
