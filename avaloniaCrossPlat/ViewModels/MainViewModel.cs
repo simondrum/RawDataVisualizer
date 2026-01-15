@@ -104,7 +104,6 @@ public partial class MainViewModel : ViewModelBase
     private UpperHotWaterViewModel? _upperHotWaterViewModel;
     #endregion
 
-    double fakeCelsius = 0;
     private async void LoadData()
     {
         try
@@ -206,11 +205,10 @@ public partial class MainViewModel : ViewModelBase
                     dataViewModel.Id = element.GetProperty("id").GetString();
                     dataViewModel.Name = element.GetProperty("name").GetString();                    
                     if (Decimal.TryParse(element.GetProperty("value").GetString(), CultureInfo.InvariantCulture, out var valueDouble))
-                        dataViewModel.Value = valueDouble + (decimal)fakeCelsius;
+                        dataViewModel.Value = valueDouble;
                     dataViewModel.Unit = element.GetProperty("unit").GetString();
                 }
             }
-            fakeCelsius++;
         }
         catch (Exception ex)
         {
