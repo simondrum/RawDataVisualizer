@@ -7,6 +7,10 @@ namespace avaloniaCrossPlat.ViewModels.HeatIndicators
 {
     public class SolarPanelViewModel : DataViewModel
     {
-        
+        public SolarPanelViewModel()
+        {
+            HotThreashold = 55;
+            ColdThreashold = 45;
+        }
     }
 }

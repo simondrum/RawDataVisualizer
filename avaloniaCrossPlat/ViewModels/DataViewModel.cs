@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Media;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -34,14 +35,21 @@ public partial class DataViewModel : ViewModelBase
     [ObservableProperty]
     private string? _title;
 
+    [ObservableProperty]
+    private SolidColorBrush? _colorBrush;
 
     [ObservableProperty]
-    private BoxShadows _colorTrend;
+    private BoxShadows _colorTrendBrush;
+
+    [ObservableProperty]
+    private Color _colorTrend;
+
+    [ObservableProperty]
+    private bool? _trend;
 
     public DataViewModel()
     {
-        ColorTrend = new BoxShadows(BoxShadow.Parse("7 7 3 0 #1f1f1f"));
-        ;
+        ColorTrendBrush = new BoxShadows(BoxShadow.Parse("7 7 3 0 #3d3d3d"));
     }
 
     partial void OnValueChanged(decimal? value)
@@ -55,11 +63,15 @@ public partial class DataViewModel : ViewModelBase
                 oldvalues = oldvalues / _oldvalueList.Count;
                 if (value < oldvalues)
                 {
-                    ColorTrend = new BoxShadows(BoxShadow.Parse($@"7 7 3 0 #038387"));
+                    ColorTrend = Color.Parse("#479ef5");
+                    ColorTrendBrush = new BoxShadows(BoxShadow.Parse($@"7 7 3 0 #479ef5"));
+                    Trend = false;
                 }
                 else if (value > oldvalues)
                 {
-                    ColorTrend = new BoxShadows(BoxShadow.Parse($@"7 7 3 0 #bc2f32"));
+                    ColorTrend = Color.Parse("#bc2f32");
+                    ColorTrendBrush = new BoxShadows(BoxShadow.Parse($@"7 7 3 0 #bc2f32"));
+                    Trend = true;
                 }
             }
             _oldvalue = value;
@@ -70,5 +82,22 @@ public partial class DataViewModel : ViewModelBase
                 _oldvalueList?.Add((decimal)_oldvalue);
             }
         }
+        ColorBrush = TemperatureChanged(value);
+    }
+
+    protected decimal HotThreashold = 60;
+    protected decimal ColdThreashold = 54;
+    protected SolidColorBrush TemperatureChanged(decimal? value)
+    {
+        if (value != null)
+        {
+            if (value > HotThreashold)
+                return new SolidColorBrush(Color.Parse("#751d1f"));
+            if (value < ColdThreashold)
+                return new SolidColorBrush(Color.Parse("#002c4e"));
+
+            return new SolidColorBrush(Color.Parse("#3a1136"));
+        }
+        return new SolidColorBrush(Color.Parse("#292929"));
     }
 }

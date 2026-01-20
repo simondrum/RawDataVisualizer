@@ -326,19 +326,19 @@ public partial class MainViewModel : ViewModelBase
             case "M1 S2 SONDE AMBIANCE MUR CHAUFFANT ":
                 {
                     if (InViewModel == null)
-                        InViewModel = new DataViewModel();
+                        InViewModel = new InViewModel();
                     return InViewModel;
                 }
             case "12 SONDE EXTERIEUR":
                 {
                     if (OutViewModel == null)
-                        OutViewModel = new DataViewModel();
+                        OutViewModel = new OutViewModel();
                     return OutViewModel;
                 }
             case "M1 S3 SONDE DE COMPENSATION INTERRUPTEUR CHAUFFAGE":
                 {
                     if (InstructionViewModel == null)
-                        InstructionViewModel = new DataViewModel();
+                        InstructionViewModel = new InstructionTemperatureViewModel();
                     return InstructionViewModel;
                 }
             // case "3 SONDE ENTREE CHAUDE ECHANGEUR SOLAIRE ":

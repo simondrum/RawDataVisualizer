@@ -7,9 +7,8 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:vm="using:avaloniaCrossPlat.ViewModels"
-  x:DataType="vm:MainViewModel"
-  Background="#ffffff"
   Margin="5"
+  x:DataType="vm:MainViewModel"
   mc:Ignorable="d">
   <Design.DataContext>
     <!--
@@ -21,9 +20,14 @@
 
   <UserControl.Resources>
     <converters:BoxShadowConverter x:Key="BoxShadowConverter" />
+    <converters:TrendToIconConverter x:Key="TrendToIconConverter" />
+
   </UserControl.Resources>
 
-  <Grid RowDefinitions="Auto,*" ColumnDefinitions="*">
+  <Grid
+    Background="#333333"
+    ColumnDefinitions="*"
+    RowDefinitions="Auto,*">
     <ProgressBar
       Grid.Row="0"
       Height="10"
@@ -42,20 +46,11 @@
         </Transitions>
       </ProgressBar.Transitions>
     </ProgressBar>
-    <!-- <controls:KeyPadView Grid.Row="1" Code="{CompiledBinding Code, Mode=TwoWay}">
-      <controls:KeyPadView.IsVisible>
-        <MultiBinding Converter="{x:Static BoolConverters.And}">
-          <Binding Path="!Error" />
-          <Binding Path="!IsDataValid" />
-        </MultiBinding>
-      </controls:KeyPadView.IsVisible>
-    </controls:KeyPadView>-->
     <Grid
+      Grid.Row="1"
       Margin="0,10,10,0"
       HorizontalAlignment="Stretch"
       VerticalAlignment="Stretch"
-      Grid.Row="1"
-      Background="#ffffff"
       ColumnDefinitions="*,*,*"
       RowDefinitions="*,*,*,*">
       <!--  Première ligne  -->
@@ -63,68 +58,84 @@
         Grid.Row="0"
         Grid.Column="0"
         Margin="10,10,0,10"
-        Background="#e0e0e0"
-        BoxShadow="{Binding InViewModel.ColorTrend}"
+        Background="{Binding InViewModel.ColorBrush}"
+        BoxShadow="{Binding InViewModel.ColorTrendBrush}"
         CornerRadius="20">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
           <TextBlock
             Grid.Row="0"
             Margin="10"
             FontSize="14"
-            Foreground="#1f1f1f"
+            Foreground="{StaticResource ForegroundTile}"
             Text="Intérieur" />
           <TextBlock
             Grid.Row="1"
             Margin="10"
             FontSize="22"
             FontWeight="Bold"
-            Foreground="#1f1f1f"
+            Foreground="{StaticResource ForegroundTile}"
             Text="{CompiledBinding InViewModel.Value, StringFormat=' {0}°'}}" />
+          <PathIcon
+            Grid.Row="1"
+            Width="20"
+            Height="20"
+            Margin="2"
+            HorizontalAlignment="Right"
+            Data="{Binding InViewModel.Trend, Converter={StaticResource TrendToIconConverter}}"
+            Foreground="{Binding InViewModel.ColorTrend}" />
         </Grid>
       </Border>
       <Border
         Grid.Row="0"
         Grid.Column="1"
         Margin="10,10,0,10"
-        Background="#e0e0e0"
-        BoxShadow="{Binding OutViewModel.ColorTrend}"
+        Background="{Binding OutViewModel.ColorBrush}"
+        BoxShadow="{Binding OutViewModel.ColorTrendBrush}"
         CornerRadius="20">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
           <TextBlock
             Grid.Row="0"
             Margin="10"
             FontSize="14"
-            Foreground="#1f1f1f"
+            Foreground="{StaticResource ForegroundTile}"
             Text="Extérieur" />
           <TextBlock
             Grid.Row="1"
             Margin="10"
             FontSize="22"
             FontWeight="Bold"
-            Foreground="#1f1f1f"
+            Foreground="{StaticResource ForegroundTile}"
             Text="{CompiledBinding OutViewModel.Value, StringFormat=' {0}°'}}" />
+          <PathIcon
+            Grid.Row="1"
+            Width="20"
+            Height="20"
+            Margin="2"
+            HorizontalAlignment="Right"
+            Data="{Binding OutViewModel.Trend, Converter={StaticResource TrendToIconConverter}}"
+            Foreground="{Binding OutViewModel.ColorTrend}" />
         </Grid>
       </Border>
       <Border
         Grid.Row="0"
         Grid.Column="2"
         Margin="10,10,0,10"
-        Background="#e0e0e0"
-        BoxShadow="{Binding InstructionViewModel.ColorTrend}"
+        Background="{Binding InstructionViewModel.ColorBrush}"
+        BoxShadow="{Binding InstructionViewModel.ColorTrendBrush}"
         CornerRadius="20">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
           <TextBlock
             Grid.Row="0"
             Margin="10"
             FontSize="14"
-            Foreground="#1f1f1f"
+            Foreground="{StaticResource ForegroundTile}"
             Text="Consigne" />
           <TextBlock
             Grid.Row="1"
             Margin="10"
             FontSize="22"
             FontWeight="Bold"
-            Foreground="#1f1f1f"
+            Foreground="{StaticResource ForegroundTile}"
             Text="{CompiledBinding InstructionViewModel.Value}" />
         </Grid>
       </Border>
@@ -133,69 +144,93 @@
         Grid.Row="1"
         Grid.Column="0"
         Margin="10,10,0,0"
-        Background="#e0e0e0"
-        BoxShadow="{Binding UpperHotWaterViewModel.ColorTrend}"
+        Background="{Binding UpperHotWaterViewModel.ColorBrush}"
+        BoxShadow="{Binding UpperHotWaterViewModel.ColorTrendBrush}"
         CornerRadius="20,20,0,0">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
           <TextBlock
             Grid.Row="0"
             Margin="10"
             FontSize="14"
-            Foreground="#1f1f1f"
+            Foreground="{StaticResource ForegroundTile}"
             Text="" />
           <TextBlock
             Grid.Row="1"
             Margin="10"
             FontSize="22"
             FontWeight="Bold"
-            Foreground="#1f1f1f"
+            Foreground="{StaticResource ForegroundTile}"
             Text="{CompiledBinding UpperHotWaterViewModel.Value, StringFormat=' {0}°'}}" />
+          <PathIcon
+            Grid.Row="1"
+            Width="20"
+            Height="20"
+            Margin="2"
+            HorizontalAlignment="Right"
+            Data="{Binding UpperHotWaterViewModel.Trend, Converter={StaticResource TrendToIconConverter}}"
+            Foreground="{Binding UpperHotWaterViewModel.ColorTrend}" />
         </Grid>
       </Border>
       <Border
         Grid.Row="2"
         Grid.Column="0"
         Margin="10,0,0,0"
-        Background="#e0e0e0"
-        BoxShadow="{Binding MidHotWaterViewModel.ColorTrend}"
+        Background="{Binding MidHotWaterViewModel.ColorBrush}"
+        BoxShadow="{Binding MidHotWaterViewModel.ColorTrendBrush}"
         CornerRadius="00">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
           <TextBlock
             Grid.Row="0"
             Margin="10"
             FontSize="14"
-            Foreground="#1f1f1f"
+            Foreground="{StaticResource ForegroundTile}"
             Text="" />
           <TextBlock
             Grid.Row="1"
             Margin="10"
             FontSize="22"
             FontWeight="Bold"
-            Foreground="#1f1f1f"
+            Foreground="{StaticResource ForegroundTile}"
             Text="{CompiledBinding MidHotWaterViewModel.Value, StringFormat=' {0}°'}}" />
+          <PathIcon
+            Grid.Row="1"
+            Width="20"
+            Height="20"
+            Margin="2"
+            HorizontalAlignment="Right"
+            Data="{Binding MidHotWaterViewModel.Trend, Converter={StaticResource TrendToIconConverter}}"
+            Foreground="{Binding MidHotWaterViewModel.ColorTrend}" />
         </Grid>
       </Border>
       <Border
         Grid.Row="3"
         Grid.Column="0"
         Margin="10,0,0,10"
-        Background="#e0e0e0"
-        BoxShadow="{Binding LowHotWaterViewModel.ColorTrend}"
+        Background="{Binding LowHotWaterViewModel.ColorBrush}"
+        BoxShadow="{Binding LowHotWaterViewModel.ColorTrendBrush}"
         CornerRadius="0,0,20,20">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
           <TextBlock
             Grid.Row="0"
             Margin="10"
             FontSize="14"
-            Foreground="#1f1f1f"
+            Foreground="{StaticResource ForegroundTile}"
             Text="" />
           <TextBlock
             Grid.Row="1"
             Margin="10"
             FontSize="22"
             FontWeight="Bold"
-            Foreground="#1f1f1f"
+            Foreground="{StaticResource ForegroundTile}"
             Text="{CompiledBinding LowHotWaterViewModel.Value, StringFormat=' {0}°'}}" />
+          <PathIcon
+            Grid.Row="1"
+            Width="20"
+            Height="20"
+            Margin="2"
+            HorizontalAlignment="Right"
+            Data="{Binding LowHotWaterViewModel.Trend, Converter={StaticResource TrendToIconConverter}}"
+            Foreground="{Binding LowHotWaterViewModel.ColorTrend}" />
         </Grid>
       </Border>
       <!--  Poele  -->
@@ -204,22 +239,22 @@
         Grid.Row="1"
         Grid.Column="1"
         Margin="10,10,0,10"
-        Background="#e0e0e0"
-        BoxShadow="{Binding StoveViewModel.ColorTrend}"
+        Background="{Binding StoveViewModel.ColorBrush}"
+        BoxShadow="{Binding StoveViewModel.ColorTrendBrush}"
         CornerRadius="20,0,0,20">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
           <TextBlock
             Grid.Row="0"
             Margin="10"
             FontSize="14"
-            Foreground="#1f1f1f"
+            Foreground="{StaticResource ForegroundTile}"
             Text="" />
           <TextBlock
             Grid.Row="1"
             Margin="10"
             FontSize="22"
             FontWeight="Bold"
-            Foreground="#1f1f1f" />
+            Foreground="{StaticResource ForegroundTile}" />
           <Border
             Grid.Row="0"
             Grid.RowSpan="4"
@@ -242,7 +277,7 @@
             Grid.RowSpan="4"
             Width="40"
             Height="80"
-            Background="#f5f5f5"
+            Background="#3d3d3d"
             CornerRadius="20"
             IsVisible="{CompiledBinding !PompePoeleActivated}">
             <Border
@@ -250,8 +285,7 @@
               Height="30"
               Margin="3"
               VerticalAlignment="Top"
-              Background="#3d3d3d"
-              BoxShadow="3 3 10 0 #e0e0e0"
+              Background="#b3b3b3"
               CornerRadius="15" />
           </Border>
         </Grid>
@@ -260,23 +294,31 @@
         Grid.Row="1"
         Grid.Column="2"
         Margin="0,10,00,10"
-        Background="#e0e0e0"
-        BoxShadow="{Binding StoveViewModel.ColorTrend}"
+        Background="{Binding StoveViewModel.ColorBrush}"
+        BoxShadow="{Binding StoveViewModel.ColorTrendBrush}"
         CornerRadius="0,20,20,0">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
           <TextBlock
             Grid.Row="0"
             Margin="10"
             FontSize="14"
-            Foreground="#1f1f1f"
+            Foreground="{StaticResource ForegroundTile}"
             Text="Poêle" />
           <TextBlock
             Grid.Row="1"
             Margin="10"
             FontSize="22"
             FontWeight="Bold"
-            Foreground="#1f1f1f"
+            Foreground="{StaticResource ForegroundTile}"
             Text="{CompiledBinding StoveViewModel.Value, StringFormat=' {0}°'}}" />
+          <PathIcon
+            Grid.Row="1"
+            Width="20"
+            Height="20"
+            Margin="2"
+            HorizontalAlignment="Right"
+            Data="{Binding StoveViewModel.Trend, Converter={StaticResource TrendToIconConverter}}"
+            Foreground="{Binding StoveViewModel.ColorTrend}" />
         </Grid>
       </Border>
       <!--  Solaire  -->
@@ -284,15 +326,15 @@
         Grid.Row="2"
         Grid.Column="1"
         Margin="10,10,0,10"
-        Background="#e0e0e0"
-        BoxShadow="{Binding SolarPanelViewModel.ColorTrend}"
+        Background="{Binding SolarPanelViewModel.ColorBrush}"
+        BoxShadow="{Binding SolarPanelViewModel.ColorTrendBrush}"
         CornerRadius="20,0,0,20">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
           <TextBlock
             Grid.Row="0"
             Margin="10"
             FontSize="14"
-            Foreground="#1f1f1f"
+            Foreground="{StaticResource ForegroundTile}"
             Text="" />
           <Border
             Grid.Row="0"
@@ -316,7 +358,7 @@
             Grid.RowSpan="4"
             Width="40"
             Height="80"
-            Background="#f5f5f5"
+            Background="#3d3d3d"
             CornerRadius="20"
             IsVisible="{CompiledBinding !PompeSolaireActivated}">
             <Border
@@ -324,8 +366,7 @@
               Height="30"
               Margin="3"
               VerticalAlignment="Top"
-              Background="#3d3d3d"
-              BoxShadow="3 3 10 0 #e0e0e0"
+              Background="#b3b3b3"
               CornerRadius="15" />
           </Border>
         </Grid>
@@ -334,23 +375,31 @@
         Grid.Row="2"
         Grid.Column="2"
         Margin="0,10,0,10"
-        Background="#e0e0e0"
-        BoxShadow="{Binding SolarPanelViewModel.ColorTrend}"
+        Background="{Binding SolarPanelViewModel.ColorBrush}"
+        BoxShadow="{Binding SolarPanelViewModel.ColorTrendBrush}"
         CornerRadius="0,20,20,0">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
           <TextBlock
             Grid.Row="0"
             Margin="10"
             FontSize="14"
-            Foreground="#1f1f1f"
+            Foreground="{StaticResource ForegroundTile}"
             Text="Solaire" />
           <TextBlock
             Grid.Row="1"
             Margin="10"
             FontSize="22"
             FontWeight="Bold"
-            Foreground="#1f1f1f"
+            Foreground="{StaticResource ForegroundTile}"
             Text="{CompiledBinding SolarPanelViewModel.Value, StringFormat=' {0}°'}}" />
+          <PathIcon
+            Grid.Row="1"
+            Width="20"
+            Height="20"
+            Margin="2"
+            HorizontalAlignment="Right"
+            Data="{Binding SolarPanelViewModel.Trend, Converter={StaticResource TrendToIconConverter}}"
+            Foreground="{Binding SolarPanelViewModel.ColorTrend}" />
         </Grid>
       </Border>
       <!--  Mur  -->
@@ -358,7 +407,7 @@
         Grid.Row="3"
         Grid.Column="1"
         Margin="10,10,0,10"
-        Background="#e0e0e0"
+        Background="{StaticResource BrushTile}"
         BoxShadow="7 7 3 0 #1f1f1f"
         CornerRadius="20,20">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
@@ -366,7 +415,7 @@
             Grid.Row="0"
             Margin="10"
             FontSize="14"
-            Foreground="#1f1f1f"
+            Foreground="{StaticResource ForegroundTile}"
             Text="Chauffage" />
           <Border
             Grid.Row="1"
@@ -390,7 +439,7 @@
             Grid.RowSpan="3"
             Width="40"
             Height="80"
-            Background="#f5f5f5"
+            Background="#3d3d3d"
             CornerRadius="20"
             IsVisible="{CompiledBinding !PompeMurActivated}">
             <Border
@@ -398,8 +447,7 @@
               Height="30"
               Margin="3"
               VerticalAlignment="Top"
-              Background="#3d3d3d"
-              BoxShadow="3 3 10 0 #e0e0e0"
+              Background="#b3b3b3"
               CornerRadius="15" />
           </Border>
         </Grid>

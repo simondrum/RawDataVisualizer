@@ -7,6 +7,10 @@ namespace avaloniaCrossPlat.ViewModels.HeatIndicators
 {
     public class MidHotWaterViewModel : DataViewModel
     {
-        
+        public MidHotWaterViewModel()
+        {
+            HotThreashold = 55;
+            ColdThreashold = 45;
+        }
     }
 }

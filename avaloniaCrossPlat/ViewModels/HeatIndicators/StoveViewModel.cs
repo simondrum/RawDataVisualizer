@@ -7,6 +7,10 @@ namespace avaloniaCrossPlat.ViewModels.HeatIndicators
 {
     public class StoveViewModel : DataViewModel
     {
-        
+        public StoveViewModel()
+        {
+            HotThreashold = 55;
+            ColdThreashold = 45;
+        }
     }
 }

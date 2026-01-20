@@ -10,6 +10,38 @@
         <local:ViewLocator />
     </Application.DataTemplates>
 
+    <Application.Resources>
+        <ResourceDictionary>
+            <!--  #292929  -->
+            <Color x:Key="BackgroundColor">#292929</Color>
+            <SolidColorBrush x:Key="BrushBackground" Color="{StaticResource BackgroundColor}" />
+            <!--  #333333  -->
+            <Color x:Key="TileColor">#333333</Color>
+            <SolidColorBrush x:Key="BrushTile" Color="{StaticResource TileColor}" />
+            <!-- #3d3d3d -->
+            <Color x:Key="NeutralColor">#333333</Color>
+            <SolidColorBrush x:Key="BrushNeutral" Color="{StaticResource NeutralColor}" />
+            <!--  #d6d6d6  -->
+            <Color x:Key="ForegroundColor">#d6d6d6</Color>
+            <SolidColorBrush x:Key="ForegroundTile" Color="{StaticResource ForegroundColor}" />
+            <!--  #479ef5  -->
+            <Color x:Key="ColorCold">#479ef5</Color>
+            <SolidColorBrush x:Key="BrushCold" Color="{StaticResource ColorCold}" />
+            <!--  #751d1f  -->
+            <Color x:Key="ColorHot">#751d1f</Color>
+            <SolidColorBrush x:Key="BrushHot" Color="{StaticResource ColorHot}" />
+        </ResourceDictionary>
+    </Application.Resources>
+    <Application.Resources>
+        <ResourceDictionary>
+            <StreamGeometry x:Key="ArrowUp">
+                M9 8.5H16.5V16 M16.5 8.5L7 18
+            </StreamGeometry>
+            <StreamGeometry x:Key="ArrowDown">
+                M 16.5 9    V 16.5    H 9    M 16.5 16.5    L 7 7
+            </StreamGeometry>
+        </ResourceDictionary>
+    </Application.Resources>
     <Application.Styles>
         <FluentTheme />
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
