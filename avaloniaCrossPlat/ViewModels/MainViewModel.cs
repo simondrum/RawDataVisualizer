@@ -51,6 +51,7 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     private double _refreshProgress = 100; // 0 → 100
     private readonly TimeSpan _refreshInterval = TimeSpan.FromSeconds(30);
+    private readonly TimeSpan _refreshWeatherInterval = TimeSpan.FromSeconds(1200);
     private readonly TimeSpan _uiTick = TimeSpan.FromMilliseconds(100);
     private DateTime _lastRefresh;
 
@@ -59,6 +60,7 @@ public partial class MainViewModel : ViewModelBase
         Code = "28559";
         StartGlobalTimer();
         StartAnimationTimer();
+        StartWeatherTimer();
     }
 
     partial void OnCodeChanged(string? value)
@@ -96,6 +98,7 @@ public partial class MainViewModel : ViewModelBase
         else
         {
             LoadData();
+            _ = RefreshWeatherAsync();
         }
     }
 
@@ -118,15 +121,19 @@ public partial class MainViewModel : ViewModelBase
     private UpperHotWaterViewModel? _upperHotWaterViewModel;
     #endregion
 
+    HttpService? Service;
     private async void LoadData()
     {
         try
         {
             if (Code == null)
                 return;
-            var service = new HttpService();
 
-            var json = await service.GetInfos("28559");
+
+            if (Service is null)
+                Service = new HttpService();
+
+            var json = await Service.GetInfos("28559");
             using var doc = JsonDocument.Parse(json);
             var root = doc.RootElement;
             var array = root.EnumerateArray();
@@ -219,6 +226,18 @@ public partial class MainViewModel : ViewModelBase
         timer.Start();
         _lastRefresh = DateTime.UtcNow;
     }
+    private void StartWeatherTimer()
+    {
+        var timer = new DispatcherTimer()
+        {
+            Interval = _refreshWeatherInterval
+        };
+        timer.Tick += async (_, __) =>
+        {
+            await RefreshWeatherAsync();
+        };
+        timer.Start();
+    }
     private void StartAnimationTimer()
     {
         var timer = new DispatcherTimer()
@@ -234,6 +253,26 @@ public partial class MainViewModel : ViewModelBase
         };
 
         timer.Start();
+    }
+
+    private async Task RefreshWeatherAsync()
+    {
+        if (Service is null)
+            Service = new HttpService();
+
+        var json = await Service.GetWeather();
+        using var doc = JsonDocument.Parse(json);
+        var root = doc.RootElement;
+
+        //"current" "extrat"
+        var currentElement = root.GetProperty("current");
+        var extra = root.GetProperty("extra");
+
+        string description = currentElement.GetProperty("description").GetString() ?? "";
+        Console.WriteLine($"description => {description}");;
+
+        string sunset = extra.GetProperty("sunset").GetString() ?? "";
+        Console.WriteLine($"Sunset => {sunset}");;
     }
 
     private async Task RefreshDataAsync()
