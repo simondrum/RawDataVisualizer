@@ -260,16 +260,15 @@
             Grid.RowSpan="4"
             Width="40"
             Height="80"
-            Background="#f1bbbc"
+            Background="#bc2f32"
             CornerRadius="20"
             IsVisible="{CompiledBinding PompePoeleActivated}">
             <Border
               Width="30"
               Height="30"
               Margin="3"
-              VerticalAlignment="Bottom"
-              Background="#bc2f32"
-              BoxShadow="3 3 10 0 #bc2f32"
+              VerticalAlignment="Top"
+              Background="#b3b3b3"
               CornerRadius="15" />
           </Border>
           <Border
@@ -284,7 +283,7 @@
               Width="30"
               Height="30"
               Margin="3"
-              VerticalAlignment="Top"
+              VerticalAlignment="Bottom"
               Background="#b3b3b3"
               CornerRadius="15" />
           </Border>
@@ -298,6 +297,13 @@
         BoxShadow="{Binding StoveViewModel.ColorTrendBrush}"
         CornerRadius="0,20,20,0">
         <Grid Margin="5" RowDefinitions="1*,2*,2*,1*">
+          <controls:FireParticles
+            HorizontalAlignment="Stretch"
+            Grid.Row="0"
+            Grid.RowSpan="4"
+            Grid.ColumnSpan="3"
+            Temperature="{CompiledBinding StoveViewModel.Value}"
+            IsHitTestVisible="False" />
           <TextBlock
             Grid.Row="0"
             Margin="10"
@@ -341,16 +347,15 @@
             Grid.RowSpan="4"
             Width="40"
             Height="80"
-            Background="#f1bbbc"
+            Background="#bc2f32"
             CornerRadius="20"
             IsVisible="{CompiledBinding PompeSolaireActivated}">
             <Border
               Width="30"
               Height="30"
               Margin="3"
-              VerticalAlignment="Bottom"
-              Background="#bc2f32"
-              BoxShadow="3 3 10 0 #bc2f32"
+              VerticalAlignment="Top"
+              Background="#b3b3b3"
               CornerRadius="15" />
           </Border>
           <Border
@@ -365,7 +370,7 @@
               Width="30"
               Height="30"
               Margin="3"
-              VerticalAlignment="Top"
+              VerticalAlignment="Bottom"
               Background="#b3b3b3"
               CornerRadius="15" />
           </Border>
@@ -422,16 +427,15 @@
             Grid.RowSpan="3"
             Width="40"
             Height="80"
-            Background="#f1bbbc"
+            Background="#bc2f32"
             CornerRadius="20"
             IsVisible="{CompiledBinding PompeMurActivated}">
             <Border
               Width="30"
               Height="30"
               Margin="3"
-              VerticalAlignment="Bottom"
-              Background="#bc2f32"
-              BoxShadow="3 3 10 0 #bc2f32"
+              VerticalAlignment="Top"
+              Background="#b3b3b3"
               CornerRadius="15" />
           </Border>
           <Border
@@ -446,7 +450,7 @@
               Width="30"
               Height="30"
               Margin="3"
-              VerticalAlignment="Top"
+              VerticalAlignment="Bottom"
               Background="#b3b3b3"
               CornerRadius="15" />
           </Border>
