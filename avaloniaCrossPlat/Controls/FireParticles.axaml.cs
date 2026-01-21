@@ -46,7 +46,7 @@ public partial class FireParticles : UserControl
 
         decimal temp = (decimal)Temperature;
 
-        if (temp < 20)
+        if (temp < 30)
             MaxParticles = 0;
         else
             MaxParticles = (int)(temp / 5);
