@@ -456,6 +456,13 @@
           </Border>
         </Grid>
       </Border>
+      <Border
+        Grid.Row="3"
+        Grid.Column="2"
+        Margin="10,10,0,10"
+        Background="{StaticResource BrushTile}"
+        BoxShadow="7 7 3 0 #1f1f1f"
+        CornerRadius="20,20"/>
     </Grid>
     <Grid
       Grid.Row="1"
