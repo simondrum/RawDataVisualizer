@@ -48,8 +48,12 @@ public partial class FireParticles : UserControl
 
         if (temp < 30)
             MaxParticles = 0;
+        else if (temp > 50)
+            MaxParticles = (int)temp;
         else
             MaxParticles = (int)(temp / 5);
+
+
 
         // Génération
         if (_particles.Count < MaxParticles)
